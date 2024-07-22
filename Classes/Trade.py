@@ -11,6 +11,7 @@ from Classes.Candle import *
 ############################################################################################################
 class SignalRequest:
 
+
     _SignalRequestFigerprints = []
 
 
