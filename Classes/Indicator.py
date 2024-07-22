@@ -2,7 +2,7 @@ import pandas as pd
 import numpy  as np
 import talib
 import random
-
+from colour import Color
 
 
 
@@ -16,12 +16,28 @@ class Buffer:
     _BuffersFingerprints = []
 
 
-    def __init__(self, numBuffer:int, sizeBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+    def __init__(self, numBuffer:int, sizeBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
-        self.numBuffer   = numBuffer
-        self.sizeBuffer  = sizeBuffer
-        self.titleBuffer = titleBuffer
 
+        while (True):
+
+            newFingerPrint = random.randint(1000000, 1000000-1)
+
+            if(newFingerPrint not in Buffer._BuffersFingerprints):
+                
+                Buffer._BuffersFingerprints.append(newFingerPrint)
+                break
+            #
+        #
+
+        self.fingerprintBuffer = Buffer._BuffersFingerprints[-1]
+        self.numBuffer         = numBuffer
+        self.sizeBuffer        = sizeBuffer
+        self.titleBuffer       = titleBuffer
+        self.jobBuffer         = jobBuffer
+        self.widthBuffer       = widthBuffer
+        self.colorBuffer       = colorBuffer
+        self.typeWindow        = typeWindow
         self.valuesBuffer = np.full(sizeBuffer, np.nan)
     #
 #
