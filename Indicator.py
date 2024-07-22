@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy  as np
+import talib
 import random
 
 
@@ -20,15 +21,15 @@ import random
 class Buffer:
 
 
-    def __init__(self, sizeBuff:int, numBuff:int, titleBuff:str):
+    def __init__(self, numBuff:int, sizeBuff:int, titleBuff:str):
         
-        self.sizeBuff  = sizeBuff
         self.numBuff   = numBuff
+        self.sizeBuff  = sizeBuff
         self.titleBuff = titleBuff
 
         self.valuesBuff = np.full(sizeBuff, np.nan)
     #
-
+#
 
 
 
@@ -69,7 +70,7 @@ class Indicator:
 
 
 
-    def SetBufferType(self, numberBuffer, nameBuffer, digitsBuffer, typeDrawBuffer=('MiddleCalculations','None','Line','Arrow','Histogram1','Histogram2','Section','ZigZag','Filling','Bars','Candles')):
+    def SetBufferType(self, numberBuffer, nameBuffer, digitsBuffer, typeDrawBuffer=('MiddleCalculations','Trade','None','Line','Arrow','ZigZag','Histogram1','Histogram2','Section','Filling','Bars','Candles')):
                   
         pass
     #
@@ -81,29 +82,10 @@ class Indicator:
 
         self.data.rename(columns={'Buffer_'+str(whichBuffer) : newName}, inplace=True)
     #
-
-
-
-
-    def MainIterator(self):
-
-        for bufferNum in range(len(self.buffersList)):
-
-            self.buffersList[bufferNum] = talib.SMA(self.closes, timeperiod=10*(bufferNum+1))
-        #
-    #
-   
    
 
 
-    def Indicate(self):
-
-        self.MainIterator()
-    #
    
-   
-   
-       
     def Indicated(self):
 
         theDF = pd.DataFrame()
@@ -132,4 +114,24 @@ class Indicator:
 
         print(self.data)
     #
+
+ 
+
+
+
+    def MainIterator(self):
+
+        for bufferNum in range(len(self.buffersList)):
+
+            self.buffersList[bufferNum] = talib.SMA(self.closes, timeperiod=10*(bufferNum+1))
+        #
+    #
+   
+   
+
+
+    def Indicate(self):
+
+        self.MainIterator()
+    #  
 #
