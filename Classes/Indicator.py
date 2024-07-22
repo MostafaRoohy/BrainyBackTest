@@ -118,7 +118,6 @@ class Indicator:
  
 
 
-
     def MainIterator(self):
 
         for bufferNum in range(len(self.buffersList)):
