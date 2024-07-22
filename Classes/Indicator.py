@@ -5,31 +5,27 @@ import random
 
 
 
+
 ############################################################################################################
-# An Indicator is a data processor that indicates and shows the core logic of market conditions.
-# It can be applies to two datas:    1) Market data    2) Another indicatored data.
-# Parameters:
-# dataMarket: Raw Data to be processed on.
-# dataIndicator: Indicatored Data to be processed on.
-# countBuffers: Data containers for the drawing datas.
-# typeDraw: Line, Arrow, to be developed more types...
-# typeWindow: The indicator chart to be int seperate window or in the market chart.
+# A Buffer is a sequence that the Brain will take actions on it.
+# Actions like Drawing line, Drawing Arrows, Opening Closing Modifying Trades and etc...
 ############################################################################################################
-
-
-
 class Buffer:
 
 
-    def __init__(self, numBuff:int, sizeBuff:int, titleBuff:str):
-        
-        self.numBuff   = numBuff
-        self.sizeBuff  = sizeBuff
-        self.titleBuff = titleBuff
+    _BuffersFingerprints = []
 
-        self.valuesBuff = np.full(sizeBuff, np.nan)
+
+    def __init__(self, numBuffer:int, sizeBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+        
+        self.numBuffer   = numBuffer
+        self.sizeBuffer  = sizeBuffer
+        self.titleBuffer = titleBuffer
+
+        self.valuesBuffer = np.full(sizeBuffer, np.nan)
     #
 #
+
 
 
 
