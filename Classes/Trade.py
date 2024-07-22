@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy  as np
 import random
-from Candle import CandleStick, Tick, CandleTick
+from Classes.Candle import *
 
 
 

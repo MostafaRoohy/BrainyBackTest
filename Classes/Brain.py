@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 import random
-import Candle as cd
-import Indicator as ind
+from Classes import Candle as cd
+from Classes import Indicator as ind
 
 
 
