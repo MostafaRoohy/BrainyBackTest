@@ -29,8 +29,8 @@ class Buffer:
                 break
             #
         #
-
         self.fingerprintBuffer = Buffer._BuffersFingerprints[-1]
+
         self.numBuffer         = numBuffer
         self.sizeBuffer        = sizeBuffer
         self.titleBuffer       = titleBuffer
@@ -38,6 +38,7 @@ class Buffer:
         self.widthBuffer       = widthBuffer
         self.colorBuffer       = colorBuffer
         self.typeWindow        = typeWindow
+        
         self.valuesBuffer = np.full(sizeBuffer, np.nan)
     #
 #
@@ -48,13 +49,23 @@ class Buffer:
 class Indicator:
 
 
+    _IndicatorsFingerprints = []
+
+
     def __init__(self, applyingData:pd.DataFrame, countBuffers:int, typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
 
-        self.idHandler    = random.randint(10000, 100000-1)
 
-        self.applyingData = applyingData
-        self.countBuffers = countBuffers
-        self.typeWindow   = typeWindow
+        while (True):
+
+            newFingerPrint = random.randint(1000000, 1000000-1)
+
+            if(newFingerPrint not in Indicator._IndicatorsFingerprints):
+                
+                Indicator._IndicatorsFingerprints.append(newFingerPrint)
+                break
+            #
+        #
+        self.fingerprintIndicator    = Indicator._IndicatorsFingerprints[-1]
 
         self.times   = self.applyingData['time'].to_numpy()
         self.opens   = self.applyingData['open'].to_numpy()
@@ -71,30 +82,18 @@ class Indicator:
         self.spreads.flags.writeable = False
         self.volumes.flags.writeable = False
 
-
         self.buffersList = []
-        for n in range(countBuffers):
-
-            self.buffersList.append(Buffer(len(applyingData), n, str(n)))
-        #
     #
 
 
 
 
-    def SetBufferType(self, numberBuffer, nameBuffer, digitsBuffer, typeDrawBuffer=('MiddleCalculations','Trade','None','Line','Arrow','ZigZag','Histogram1','Histogram2','Section','Filling','Bars','Candles')):
-                  
-        pass
+    def SetNewBuffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+        
+        newBuffer = Buffer(numBuffer, len(self.applyingData), titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
+        self.buffersList.append(newBuffer)
     #
 
-
-
-
-    def SetBufferMeanlessValue(self, whichBuffer:int, newName:str):
-
-        self.data.rename(columns={'Buffer_'+str(whichBuffer) : newName}, inplace=True)
-    #
-   
 
 
    
