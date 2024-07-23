@@ -20,7 +20,7 @@ class Buffer:
 
 
 
-    def __init__(self, numBuffer:int, sizeBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+    def __init__(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
 
         while (True):
@@ -36,14 +36,14 @@ class Buffer:
         self.fingerprintBuffer = Buffer._BuffersFingerprints[-1]
 
         self.numBuffer         = numBuffer
-        self.sizeBuffer        = sizeBuffer
+        self.sizeBuffer        = 0
         self.titleBuffer       = titleBuffer
         self.jobBuffer         = jobBuffer
         self.widthBuffer       = widthBuffer
         self.colorBuffer       = colorBuffer
         self.typeWindow        = typeWindow
 
-        self.valuesBuffer = np.full(sizeBuffer, np.nan)
+        self.valuesBuffer = [None for _ in range(0)]
     #
 
 
@@ -52,7 +52,11 @@ class Buffer:
     def ResizeBuffer(self, newSize):
 
         self.sizeBuffer  = newSize
-        self.valuesBuffer = np.resize(self.valuesBuffer, (newSize, ))
+
+        if len(self.valuesBuffer) < newSize:
+
+            self.valuesBuffer.extend([None] * (newSize - len(self.valuesBuffer)))
+        #
     #
 #
 
