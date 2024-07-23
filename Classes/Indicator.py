@@ -60,7 +60,7 @@ class Indicator:
 
 
 
-    def __init__(self, applyingData:pd.DataFrame, countBuffers:int, typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+    def __init__(self):
 
 
         while (True):
