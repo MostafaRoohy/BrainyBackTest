@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from lightweight_charts import JupyterChart
 import random
 from Classes import Candle as cd
 from Classes import Indicator as ind
@@ -27,50 +28,50 @@ class Brain:
 
 
 
+    def AddIndicator(self, newIndicator:ind.Indicator):
+
+        self.indicators.append(newIndicator)
+        self.indicators[-1].FeedInitialData(self.knowledge)
+    #
+
+
+
+
     def Think(self):
 
-        pass
+        for indicator in self.indicators:
+
+            indicator.OnStart()
+        #
     #
 
-    def Speak(self):
 
-        pass
-    #
+
 
     def Imagine(self):
 
-        pass
+        chart = JupyterChart(inner_width=0.5, inner_height=0.5, width=1300, height=500, toolbox=True)
+        chart.set(self.knowledge)
+
+
+        for indicator in self.indicators:
+
+            for bufferNum, buffer in indicator.buffersDict:
+
+                if (buffer.jobBuffer=='DrawLine'):
+
+                    self.knowledge[buffer.titleBuffer] = pd.Series(buffer.valuesBuffer)
+
+                    chart.create_line(name='Buffer_'+str(buffersCount), color='rgba(255, 0, 0, 0.6)', price_label=False, price_line=False).set(processed)
+                #
+            #
+        #
     #
 
-    def ThinkSpeak(self):
-
-        pass
-    #
-
-    def ThinkImagine(self):
-
-        pass
-    #
-
-    def ThinkSpeakImagine(self):
-
-        pass
-    #
 
 
 
-
-    def NewData(self, newData:cd.CandleStick):
-
-        pass
-    #
-
-    def NewData(self, newData:cd.Tick):
-
-        pass
-    #
-
-    def NewData(self, newData:cd.CandleTick):
+    def Speak(self):
 
         pass
     #
