@@ -13,7 +13,11 @@ from colour import Color
 class Buffer:
 
 
+
+
     _BuffersFingerprints = []
+
+
 
 
     def __init__(self, numBuffer:int, sizeBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
@@ -38,7 +42,7 @@ class Buffer:
         self.widthBuffer       = widthBuffer
         self.colorBuffer       = colorBuffer
         self.typeWindow        = typeWindow
-        
+
         self.valuesBuffer = np.full(sizeBuffer, np.nan)
     #
 #
@@ -49,7 +53,11 @@ class Buffer:
 class Indicator:
 
 
+
+
     _IndicatorsFingerprints = []
+
+
 
 
     def __init__(self, applyingData:pd.DataFrame, countBuffers:int, typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
@@ -82,7 +90,7 @@ class Indicator:
         self.spreads.flags.writeable = False
         self.volumes.flags.writeable = False
 
-        self.buffersList = []
+        self.buffersDict = dict()
     #
 
 
@@ -91,7 +99,39 @@ class Indicator:
     def SetNewBuffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
         newBuffer = Buffer(numBuffer, len(self.applyingData), titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
-        self.buffersList.append(newBuffer)
+        self.buffersDict[numBuffer] = newBuffer
+    #
+
+
+
+
+    def SefValueBufferAtIndex(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
+        
+        (self.buffersDict[numBuffer]).valuesBuffer[indexBuffer] = valueBuffer
+    #
+
+
+
+
+    def GetValueBufferAtIndex(self, numBuffer:int, indexBuffer:int):
+
+        return ((self.buffersDict[numBuffer]).valuesBuffer[indexBuffer])
+    #
+
+
+
+
+    def SefValueBufferAtTime(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
+        
+        pass
+    #
+
+
+
+
+    def GetValueBufferAtTime(self, numBuffer:int, indexBuffer:int):
+
+        pass
     #
 
 
