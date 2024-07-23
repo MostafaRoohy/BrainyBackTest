@@ -25,7 +25,7 @@ class Buffer:
 
         while (True):
 
-            newFingerPrint = random.randint(1000000, 1000000-1)
+            newFingerPrint = random.randint(1000000, 10000000-1)
 
             if(newFingerPrint not in Buffer._BuffersFingerprints):
                 
@@ -65,7 +65,7 @@ class Indicator:
 
         while (True):
 
-            newFingerPrint = random.randint(1000000, 1000000-1)
+            newFingerPrint = random.randint(1000000, 10000000-1)
 
             if(newFingerPrint not in Indicator._IndicatorsFingerprints):
                 
@@ -74,7 +74,6 @@ class Indicator:
             #
         #
         self.fingerprintIndicator    = Indicator._IndicatorsFingerprints[-1]
-
 
         self.buffersDict = dict()
 
@@ -87,7 +86,7 @@ class Indicator:
 
     def SetNewBuffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
-        newBuffer = Buffer(numBuffer, len(self.applyingData), titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
+        newBuffer = Buffer(numBuffer, 0, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
         self.buffersDict[numBuffer] = newBuffer
     #
 
