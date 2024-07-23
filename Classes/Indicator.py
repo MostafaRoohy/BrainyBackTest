@@ -181,7 +181,7 @@ class Indicator:
 
     def OnStart(self):
 
-        self.functionOnStart(self.times, self.opens, self.highs, self.lows, self.closes, self.spreads, self.volumes)
+        self.functionOnStart(self, self.times, self.opens, self.highs, self.lows, self.closes, self.spreads, self.volumes)
     #
 
 
