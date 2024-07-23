@@ -73,7 +73,7 @@ class Indicator:
 
 
 
-    def __init__(self):
+    def __init__(self, nameIndicator:str):
 
 
         while (True):
@@ -87,6 +87,7 @@ class Indicator:
             #
         #
         self.fingerprintIndicator    = Indicator._IndicatorsFingerprints[-1]
+        self.name                    = nameIndicator
 
         self.buffersDict = dict()
 
