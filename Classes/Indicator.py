@@ -82,13 +82,6 @@ class Indicator:
         self.closes  = self.applyingData['close'].to_numpy()
         self.spreads = self.applyingData['spread'].to_numpy()
         self.volumes = self.applyingData['volume'].to_numpy()
-        self.times.flags.writeable   = False
-        self.opens.flags.writeable   = False
-        self.highs.flags.writeable   = False
-        self.lows.flags.writeable    = False
-        self.closes.flags.writeable  = False
-        self.spreads.flags.writeable = False
-        self.volumes.flags.writeable = False
 
         self.buffersDict = dict()
 
@@ -148,9 +141,9 @@ class Indicator:
 
 
 
-    def SetFunctionOnTick(self, functionPnTick):
+    def SetFunctionOnTick(self, functionOnTick):
 
-        self.functionPnTick = functionPnTick
+        self.functionPnTick = functionOnTick
     #
 
 
@@ -158,7 +151,7 @@ class Indicator:
 
     def OnStart(self):
 
-        self.functionOnStart
+        self.functionOnStart(self.times, self.opens, self.highs, self.lows, self.closes, self.spreads, self.volumes)
     #
 
 
