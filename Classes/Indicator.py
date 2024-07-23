@@ -125,7 +125,12 @@ class Indicator:
         self.lows         = initialData['low'].to_numpy()
         self.closes       = initialData['close'].to_numpy()
         self.spreads      = initialData['spread'].to_numpy()
-        self.volumes      = initialData['volume'].to_numpy()           
+        self.volumes      = initialData['volume'].to_numpy()
+        
+        for key, buffer in self.buffersDict:
+
+            buffer.ResizeBuffer(len(initialData))
+        #
     #
 
 
