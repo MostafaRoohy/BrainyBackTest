@@ -79,7 +79,7 @@ class Indicator:
         self.buffersDict = dict()
 
         self.functionOnStart = None
-        self.functionPnTick  = None
+        self.functionOnTick  = None
     #
 
 
