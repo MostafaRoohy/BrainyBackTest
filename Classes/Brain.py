@@ -62,10 +62,13 @@ class Brain:
 
                     self.knowledge[buffer.titleBuffer] = pd.Series(buffer.valuesBuffer)
 
-                    chart.create_line(name='Buffer_'+str(buffersCount), color='rgba(255, 0, 0, 0.6)', price_label=False, price_line=False).set(processed)
+                    chart.create_line(name=buffer.titleBuffer, color=buffer.colorBuffer, price_label=False, price_line=False).set(self.knowledge)
                 #
             #
         #
+
+
+        chart.load()
     #
 
 
