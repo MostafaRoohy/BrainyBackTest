@@ -75,13 +75,6 @@ class Indicator:
         #
         self.fingerprintIndicator    = Indicator._IndicatorsFingerprints[-1]
 
-        self.times   = self.applyingData['time'].to_numpy()
-        self.opens   = self.applyingData['open'].to_numpy()
-        self.highs   = self.applyingData['high'].to_numpy()
-        self.lows    = self.applyingData['low'].to_numpy()
-        self.closes  = self.applyingData['close'].to_numpy()
-        self.spreads = self.applyingData['spread'].to_numpy()
-        self.volumes = self.applyingData['volume'].to_numpy()
 
         self.buffersDict = dict()
 
