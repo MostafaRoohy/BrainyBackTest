@@ -56,7 +56,7 @@ class Brain:
 
         for indicator in self.indicators:
 
-            for bufferNum, buffer in indicator.buffersDict:
+            for buffer in indicator.buffersDict.values():
 
                 if (buffer.jobBuffer=='DrawLine'):
 
