@@ -60,9 +60,9 @@ class Brain:
 
                 if (buffer.jobBuffer=='DrawLine'):
 
-                    self.knowledge[buffer.titleBuffer] = pd.Series(buffer.valuesBuffer)
+                    self.knowledge[indicator.name+"_"+buffer.titleBuffer] = pd.Series(buffer.valuesBuffer)
 
-                    chart.create_line(name=buffer.titleBuffer, color=buffer.colorBuffer, price_label=False, price_line=False).set(self.knowledge)
+                    chart.create_line(name=(indicator.name+"_"+buffer.titleBuffer), color=buffer.colorBuffer, price_label=False, price_line=False).set(self.knowledge)
                 #
             #
         #
