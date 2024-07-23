@@ -91,6 +91,9 @@ class Indicator:
         self.volumes.flags.writeable = False
 
         self.buffersDict = dict()
+
+        self.functionOnStart = None
+        self.functionPnTick  = None
     #
 
 
@@ -113,17 +116,17 @@ class Indicator:
 
 
 
-    def GetValueBufferAtIndex(self, numBuffer:int, indexBuffer:int):
-
-        return ((self.buffersDict[numBuffer]).valuesBuffer[indexBuffer])
+    def SefValueBufferAtTime(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
+        
+        pass
     #
 
 
 
 
-    def SefValueBufferAtTime(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
-        
-        pass
+    def GetValueBufferAtIndex(self, numBuffer:int, indexBuffer:int):
+
+        return ((self.buffersDict[numBuffer]).valuesBuffer[indexBuffer])
     #
 
 
@@ -136,52 +139,33 @@ class Indicator:
 
 
 
-   
-    def Indicated(self):
 
-        theDF = pd.DataFrame()
+    def SetFunctionOnStart(self, functionOnStart):
 
-        theDF['time']   = self.times
-        theDF['open']   = self.opens
-        theDF['high']   = self.highs
-        theDF['low']    = self.lows
-        theDF['close']  = self.closes
-        theDF['spread'] = self.spreads
-        theDF['volume'] = self.volumes
-
-        for bufferNum in range(len(self.buffersList)):
-
-            theDF['Buffer_'+str(bufferNum)] = pd.Series(self.buffersList[bufferNum])
-        #
-
-
-        return (theDF)
-    # 
-
-
-
-
-    def PrintData(self):
-
-        print(self.data)
+        self.functionOnStart = functionOnStart
     #
 
- 
 
 
-    def MainIterator(self):
 
-        for bufferNum in range(len(self.buffersList)):
+    def SetFunctionOnTick(self, functionPnTick):
 
-            self.buffersList[bufferNum] = talib.SMA(self.closes, timeperiod=10*(bufferNum+1))
-        #
+        self.functionPnTick = functionPnTick
     #
-   
-   
 
 
-    def Indicate(self):
 
-        self.MainIterator()
-    #  
+
+    def OnStart(self):
+
+        self.functionOnStart
+    #
+
+
+
+
+    def OnTick(self):
+
+        self.functionPnTick
+    #
 #
