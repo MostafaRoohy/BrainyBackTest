@@ -45,6 +45,15 @@ class Buffer:
 
         self.valuesBuffer = np.full(sizeBuffer, np.nan)
     #
+
+
+
+
+    def ResizeBuffer(self, newSize):
+
+        self.sizeBuffer  = newSize
+        self.valuesBuffer = np.resize(self.valuesBuffer, (newSize, ))
+    #
 #
 
 
@@ -111,7 +120,7 @@ class Indicator:
         self.lows         = initialData['low'].to_numpy()
         self.closes       = initialData['close'].to_numpy()
         self.spreads      = initialData['spread'].to_numpy()
-        self.volumes      = initialData['volume'].to_numpy()
+        self.volumes      = initialData['volume'].to_numpy()           
     #
 
 
