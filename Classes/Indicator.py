@@ -109,7 +109,7 @@ class Indicator:
 
     def SetNewBuffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
-        newBuffer = Buffer(numBuffer, 0, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
+        newBuffer = Buffer(numBuffer, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
         self.buffersDict[numBuffer] = newBuffer
     #
 
