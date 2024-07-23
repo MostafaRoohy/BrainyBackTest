@@ -77,6 +77,15 @@ class Indicator:
 
         self.buffersDict = dict()
 
+        self.applyingData = None
+        self.times        = None
+        self.opens        = None
+        self.highs        = None
+        self.lows         = None
+        self.closes       = None
+        self.spreads      = None
+        self.volumes      = None
+
         self.functionOnStart = None
         self.functionOnTick  = None
     #
@@ -88,6 +97,21 @@ class Indicator:
         
         newBuffer = Buffer(numBuffer, 0, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
         self.buffersDict[numBuffer] = newBuffer
+    #
+
+
+
+
+    def FeedInitialData(self, initialData:pd.DataFrame):
+
+        self.applyingData = initialData
+        self.times        = initialData['time'].to_numpy()
+        self.opens        = initialData['open'].to_numpy()
+        self.highs        = initialData['high'].to_numpy()
+        self.lows         = initialData['low'].to_numpy()
+        self.closes       = initialData['close'].to_numpy()
+        self.spreads      = initialData['spread'].to_numpy()
+        self.volumes      = initialData['volume'].to_numpy()
     #
 
 
