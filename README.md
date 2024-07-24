@@ -1,11 +1,8 @@
 ## BrainyBackTest
-Backtesting with TradingView charting and visualization capabilities, addressing limitations present in current backtesting solutions.
+This project focuses on creating a tool for testing trading strategies using TradingView's charts. The aim is to overcome the limitations of current testing tools.
 
+In the financial world, it's crucial to understand that traders' behaviors and views evolve over time. To succeed in trading, you need fresh and innovative ideas. Most trading platforms, like TradingView and MetaQuotes, are closed systems, which means there are concerns that they might take developers' ideas without permission. That's why this project is being developed as an open-source tool, allowing anyone to test their trading ideas and potentially profit from them.
 
-Well, if you are a darwinism, then you know market's participants' psychology and trading views will change over time. That's how trading edge works, only new unique ideas will make money.
-And I think TradingView or MetaQuotes developed their platforms as closed source so they see the ideas background.
-That's why I've build this open source project, so everyone can test their ideas and let their hard-worked idea make money.
+By combining the programming principles of MetaTrader 5 (MT5) with the visually appealing charts of TradingView, this project aims to provide a robust tool for analyzing and evaluating trading strategies.
 
-I've combined MT5's programming Principles with TradingView's beautiful charts. Now we have both of their powers.
-
-BTW, let's not talk about all creepy rumors on forums about TradingView or MetaQuotes. If you don't think they're stealing coders' ideas, take some time to search about them.
+Lastly, there have been rumors circulating online about TradingView and MetaQuotes potentially using developers' ideas without consent. It's advisable to research these claims further before forming any conclusions about their practices.
