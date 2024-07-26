@@ -66,7 +66,7 @@ class Brain:
 
                         if (arrow is not None):
 
-                            self.chart.marker(time=buffer.times[i], position='below', shape='arrow_up')
+                            self.chart.marker(time=buffer.times[i], position='below', shape='arrow_up', color=str(buffer.color))
                         #
                     #
                 #
@@ -78,7 +78,7 @@ class Brain:
 
                         if (arrow is not None):
 
-                            self.chart.marker(time=buffer.times[i], position='above', shape='arrow_down')
+                            self.chart.marker(time=buffer.times[i], position='above', shape='arrow_down', color=str(buffer.color))
                         #
                     #
                 #
