@@ -35,15 +35,16 @@ class Buffer:
         #
         self.fingerprintBuffer = Buffer._BuffersFingerprints[-1]
 
-        self.numBuffer         = numBuffer
-        self.sizeBuffer        = 0
-        self.titleBuffer       = titleBuffer
-        self.jobBuffer         = jobBuffer
-        self.widthBuffer       = widthBuffer
-        self.colorBuffer       = colorBuffer
-        self.typeWindow        = typeWindow
+        self.num         = numBuffer
+        self.size        = 0
+        self.title       = titleBuffer
+        self.job         = jobBuffer
+        self.width       = widthBuffer
+        self.color       = colorBuffer
+        self.typeWindow  = typeWindow
 
-        self.valuesBuffer = [None for _ in range(0)]
+        self.values = [None for _ in range(0)]
+        self.times  = [None for _ in range(0)]
     #
 
 
@@ -53,9 +54,9 @@ class Buffer:
 
         self.sizeBuffer  = newSize
 
-        if len(self.valuesBuffer) < newSize:
+        if len(self.values) < newSize:
 
-            self.valuesBuffer.extend([None] * (newSize - len(self.valuesBuffer)))
+            self.values.extend([None] * (newSize - len(self.values)))
         #
     #
 #
@@ -86,10 +87,10 @@ class Indicator:
                 break
             #
         #
-        self.fingerprintIndicator    = Indicator._IndicatorsFingerprints[-1]
-        self.name                    = nameIndicator
+        self.fingerprint    = Indicator._IndicatorsFingerprints[-1]
+        self.name           = nameIndicator
 
-        self.buffersDict = dict()
+        self.buffers        = dict()
 
         self.applyingData = None
         self.times        = None
@@ -110,7 +111,7 @@ class Indicator:
     def SetNewBuffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
         newBuffer = Buffer(numBuffer, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
-        self.buffersDict[numBuffer] = newBuffer
+        self.buffers[numBuffer] = newBuffer
     #
 
 
@@ -128,9 +129,10 @@ class Indicator:
         self.volumes      = initialData['volume'].to_numpy()
 
         
-        for buffer in self.buffersDict.values():
+        for buffer in self.buffers.values():
 
             buffer.ResizeBuffer(len(initialData))
+            buffer.times = initialData['time'].to_list()
         #
     #
 
@@ -139,7 +141,7 @@ class Indicator:
 
     def SefValueBufferAtIndex(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
         
-        (self.buffersDict[numBuffer]).valuesBuffer[indexBuffer] = valueBuffer
+        (self.buffers[numBuffer]).values[indexBuffer] = valueBuffer
     #
 
 
@@ -155,7 +157,7 @@ class Indicator:
 
     def GetValueBufferAtIndex(self, numBuffer:int, indexBuffer:int):
 
-        return ((self.buffersDict[numBuffer]).valuesBuffer[indexBuffer])
+        return ((self.buffers[numBuffer]).values[indexBuffer])
     #
 
 

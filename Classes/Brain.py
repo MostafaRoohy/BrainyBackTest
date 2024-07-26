@@ -50,23 +50,26 @@ class Brain:
 
         for indicator in self.indicators:
 
-            for buffer in indicator.buffersDict.values():
+            for buffer in indicator.buffers.values():
 
-                if (buffer.jobBuffer=='DrawLine'):
+                if (buffer.job=='DrawLine'):
 
-                    title = str(indicator.name+"_"+buffer.titleBuffer)
-                    self.knowledge[title] = pd.Series(buffer.valuesBuffer)
-                    self.chart.create_line(name=(title), color=buffer.colorBuffer, price_label=False, price_line=False).set(self.knowledge)
+                    title = str(indicator.name+"_"+buffer.title)
+                    self.knowledge[title] = pd.Series(buffer.values)
+                    self.chart.create_line(name=(title), color=buffer.color, price_label=False, price_line=False).set(self.knowledge)
                 #
-                elif (buffer.jobBuffer=='DrawArrowUps'):
+                elif (buffer.job=='DrawArrowUps'):
+
+                    for arrow in (buffer.values):
+
+                        self.chart.marker()
+                    #
+                #
+                elif (buffer.job=='DrawArrowDns'):
 
                     pass
                 #
-                elif (buffer.jobBuffer=='DrawArrowDns'):
-
-                    pass
-                #
-                elif (buffer.jobBuffer=='Signal'):
+                elif (buffer.job=='Signal'):
 
                     pass
                 #
