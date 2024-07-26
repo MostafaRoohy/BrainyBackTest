@@ -70,25 +70,23 @@ class Tick:
 
 class CandleTick:
 
-    def __init__(self, candleTimestampOpened, candleTimestampClosed, candleIndex, candleOpen, candleHigh, candleLow, candleClose, candleTicks: np.array, candleSpread, marketPoints):
+    def __init__(self, candleTimestampA, candleTimestampB, candleIndex, candleOpen, candleHigh, candleLow, candleClose, candleVolume, candleTicks: np.array):
 
-        self.candleIndex = candleIndex
-
-
-        self.timestampOpened = candleTimestampOpened
-        self.timestampClosed = candleTimestampClosed
+        self.index = candleIndex
 
 
-        self.open  = candleOpen
-        self.high  = candleHigh
-        self.low   = candleLow
-        self.close = candleClose
+        self.timestampA = candleTimestampA
+        self.timestampA = candleTimestampB
+
+
+        self.open   = candleOpen
+        self.high   = candleHigh
+        self.low    = candleLow
+        self.close  = candleClose
+        self.volume = candleVolume
+
 
 
         self.ticks = candleTicks
-
-
-        self.spread   = (candleSpread)
-        self.slippage = (self.spread*marketPoints)
     #
 #
