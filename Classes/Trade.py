@@ -7,7 +7,7 @@ from Classes.Candle import *
 
 
 ############################################################################################################
-# A SignalRequest is like a clue that the Indicator generates, so the Brain can act upon these clues.
+# A SignalRequest is like a clue that is inside an Indicator's buffer, so the Brain can act upon these clues.
 ############################################################################################################
 class SignalRequest:
 
@@ -15,7 +15,7 @@ class SignalRequest:
     _SignalRequestFigerprints = []
 
 
-    def __init__(self, action=('NewOrder','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), byFingerprint=0):
+    def __init__(self, action=('NewOrderLimit','NewOrderTriggerLimit','NewOrderMarket','NewOrderTriggerMarket','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), direction=('BuyLong','SellShort'), priceTrigger=0.0, priceOpen=0.0, priceTP=0.0, priceSL=0.0, valueVolume=0.0, byFingerprint=0):
         
         self.action        = action
         self.byFingerprint = byFingerprint
