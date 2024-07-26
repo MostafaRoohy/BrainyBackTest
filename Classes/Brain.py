@@ -56,20 +56,35 @@ class Brain:
 
                     title = str(indicator.name+"_"+buffer.title)
                     self.knowledge[title] = pd.Series(buffer.values)
-                    self.chart.create_line(name=(title), color=buffer.color, price_label=False, price_line=False).set(self.knowledge)
+                    self.chart.create_line(name=title, color=buffer.color, price_label=False, price_line=False).set(self.knowledge)
                 #
-                elif (buffer.job=='DrawArrowUps'):
 
-                    for arrow in (buffer.values):
 
-                        self.chart.marker()
+                if (buffer.job=='DrawArrowUps'):
+
+                    for i, arrow in enumerate(buffer.values):
+
+                        if (arrow is not None):
+
+                            self.chart.marker(time=buffer.times[i], position='below', shape='arrow_up')
+                        #
                     #
                 #
-                elif (buffer.job=='DrawArrowDns'):
 
-                    pass
+
+                if (buffer.job=='DrawArrowDns'):
+
+                    for i, arrow in enumerate(buffer.values):
+
+                        if (arrow is not None):
+
+                            self.chart.marker(time=buffer.times[i], position='above', shape='arrow_down')
+                        #
+                    #
                 #
-                elif (buffer.job=='Signal'):
+
+
+                if (buffer.job=='Signal'):
 
                     pass
                 #
