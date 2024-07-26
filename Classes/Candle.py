@@ -78,7 +78,6 @@ class CandleTick:
         self.timestampA = candleTimestampA
         self.timestampA = candleTimestampB
 
-
         self.open   = candleOpen
         self.high   = candleHigh
         self.low    = candleLow
