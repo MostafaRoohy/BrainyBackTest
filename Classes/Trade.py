@@ -18,19 +18,27 @@ class SignalRequest:
     def __init__(self, action=('NewOrderLimit','NewOrderTriggerLimit','NewOrderMarket','NewOrderTriggerMarket','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), direction=('BuyLong','SellShort'), priceTrigger=0.0, priceOpen=0.0, priceTP=0.0, priceSL=0.0, valueVolume=0.0, byFingerprint=0):
         
         self.action        = action
+        self.direction     = direction
+
+        self.priceTrigger  = priceTrigger
+        self.priceOpen     = priceOpen
+        self.priceTP       = priceTP
+        self.priceSL       = priceSL
+        self.valueVolume   = valueVolume
+
         self.byFingerprint = byFingerprint
 
-        if (action=='NewOrder'):
 
-            while (True):
 
-                newFingerPrint = random.randint(1000000, 1000000-1)
+        while (True):
 
-                if(newFingerPrint not in SignalRequest._SignalRequestFigerprints):
-                    
-                    SignalRequest._SignalRequestFigerprints.append(newFingerPrint)
-                    break
-                #
+            newFingerPrint = random.randint(1000000, 1000000-1)
+
+            if(newFingerPrint not in SignalRequest._SignalRequestFigerprints):
+                
+                SignalRequest._SignalRequestFigerprints.append(newFingerPrint)
+                
+                break
             #
         #
     #
