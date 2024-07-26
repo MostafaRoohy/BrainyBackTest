@@ -23,6 +23,9 @@ class Brain:
         self.orders    = []
         self.trades    = []
         self.Positions = []
+
+        self.chart = JupyterChart(inner_width=0.5, inner_height=0.5, width=1300, height=500, toolbox=True)
+        self.chart.set(chartData)
     #
 
 
@@ -43,15 +46,6 @@ class Brain:
 
             indicator.OnStart()
         #
-    #
-
-
-
-
-    def Imagine(self):
-
-        chart = JupyterChart(inner_width=0.5, inner_height=0.5, width=1300, height=500, toolbox=True)
-        chart.set(self.knowledge)
 
 
         for indicator in self.indicators:
@@ -60,15 +54,32 @@ class Brain:
 
                 if (buffer.jobBuffer=='DrawLine'):
 
-                    self.knowledge[indicator.name+"_"+buffer.titleBuffer] = pd.Series(buffer.valuesBuffer)
+                    title = str(indicator.name+"_"+buffer.titleBuffer)
+                    self.knowledge[title] = pd.Series(buffer.valuesBuffer)
+                    self.chart.create_line(name=(title), color=buffer.colorBuffer, price_label=False, price_line=False).set(self.knowledge)
+                #
+                elif (buffer.jobBuffer=='DrawArrowUps'):
 
-                    chart.create_line(name=(indicator.name+"_"+buffer.titleBuffer), color=buffer.colorBuffer, price_label=False, price_line=False).set(self.knowledge)
+                    pass
+                #
+                elif (buffer.jobBuffer=='DrawArrowDns'):
+
+                    pass
+                #
+                elif (buffer.jobBuffer=='Signal'):
+
+                    pass
                 #
             #
         #
+    #
 
 
-        chart.load()
+
+
+    def Imagine(self):
+
+        self.chart.load()
     #
 
 
