@@ -20,13 +20,13 @@ import random
 
 class CandleStick:
 
-    def __init__(self, candleTimestampOpened, candleTimestampClosed, candleIndex, candleOpen, candleHigh, candleLow, candleClose, candleVolume, candleSpread, marketPoints):
+    def __init__(self, candleIndex, candleTimestampA, candleTimestampB, candleOpen, candleHigh, candleLow, candleClose, candleVolume, candleSpread, marketPoints):
 
         self.index = candleIndex
 
 
-        self.timestampOpened = candleTimestampOpened
-        self.timestampClosed = candleTimestampClosed
+        self.timestampA = candleTimestampA
+        self.timestampB = candleTimestampB
 
 
         self.open   = candleOpen
@@ -36,8 +36,8 @@ class CandleStick:
         self.volume = candleVolume
 
 
-        self.spread   = (candleSpread)
-        self.slippage = (self.spread*marketPoints)
+        self.averagespread   = (candleSpread)
+        self.averageslippage = (candleSpread*marketPoints)
     #
 #
 
@@ -46,21 +46,22 @@ class CandleStick:
 
 class Tick:
 
-    def __init__(self, tickTimestamp, tickIndex, tickPrice, tickVolume, bidPrice, askPrice, bidVolume, askVolume, marketPoints):
-
-        self.index = tickIndex
-
+    def __init__(self, tickTimestamp:int, tickPrice:float, tickVolume:float, bidPrice:float, askPrice:float, bidVolume:float, askVolume:float, tickWaitMS:int):
 
         self.timestamp = tickTimestamp
 
 
-        self.tradedprice = tickPrice
-        self.volume      = tickVolume
+        self.price     = tickPrice
+        self.volume    = tickVolume
 
         self.askPrice  = askPrice
         self.bidPrice  = bidPrice
+
         self.askVolume = askVolume
         self.bidVolume = bidVolume
+
+
+        self.waitMS  = tickWaitMS
     #
 #
 
