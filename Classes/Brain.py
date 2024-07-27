@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 from lightweight_charts import JupyterChart
 import random
-from Classes import Candle as cd
-from Classes import Indicator as ind
 
+from Classes.Candle import *
+from Classes.Indicator import *
+from Classes.Trade import *
 
 
 class Brain:
@@ -31,7 +32,7 @@ class Brain:
 
 
 
-    def AddIndicator(self, newIndicator:ind.Indicator):
+    def AddIndicator(self, newIndicator:Indicator):
 
         self.indicators.append(newIndicator)
         self.indicators[-1].FeedInitialData(self.knowledge)
@@ -86,7 +87,17 @@ class Brain:
 
                 if (buffer.job=='Signal'):
 
-                    pass
+                    for i, signal in enumerate(buffer.values):
+
+                        if (arrow is not None):
+
+                            newOrder = Order(indexSignaled=i, enumType=signal.action, enumDirection=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, PriceTP=signal.priceTP)
+
+                            self.orders.append(newOrder)
+                        #
+                    #
+
+                    
                 #
             #
         #
