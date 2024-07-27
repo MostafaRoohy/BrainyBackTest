@@ -48,32 +48,52 @@ class SignalRequest:
 
 
 ############################################################################################################
-# An Order is a command that TheSignalerModule sends to the platform.
+# An Order is a command that the Brain generates and sends to the platform.
 ############################################################################################################
 class Order:
 
 
-    def __init__(self, indexSignaled, valueVolume, priceOpen, priceSL=0, priceTP=0, priceTrigger=0, enumDirection=('BuyLong','SellShort'), enumType=('Limit','TriggerLimit','Market','TriggerMarket')):
-
-        self.indexSignaled = indexSignaled
 
 
-        self.valueVolume      = valueVolume
-        self.priceOpen        = priceOpen
-        self.priceSL          = priceSL
-        self.priceTP          = priceTP
-        self.priceTrigger     = priceTrigger
-        self.istrigered       = (True) if (enumType=='Limit' or enumType=='Market') else (False)
+    _Fingerprints = []
 
-        self.ticketOrder      = None
 
-        self.enumDirection    = enumDirection
-        self.enumType         = enumType
 
+
+    def __init__(self, indexPlaced, timestampPlaced, type=('Limit','TriggerLimit','Market','TriggerMarket'), direction=('BuyLong','SellShort'), valueVolume=0, priceTrigger=0, priceOpen=0, priceSL=0, priceTP=0):
+
+
+        while (True):
+
+            newFingerPrint = random.randint(1000000, 10000000-1)
+
+            if(newFingerPrint not in Order._Fingerprints):
+                
+                Order._Fingerprints.append(newFingerPrint)
+                break
+            #
+        #
+        self.fingerprint        = Order._Fingerprints[-1]
+
+
+        self.indexPlaced       = indexPlaced
+        self.timestampPlaced   = timestampPlaced
+
+
+        self.type              = type
+        self.direction         = direction
+
+        self.valueVolume       = valueVolume
+        self.priceTrigger      = priceTrigger
+        self.priceOpen         = priceOpen
+        self.priceSL           = priceSL
+        self.priceTP           = priceTP
+
+
+        self.istrigered       = (True) if (type=='Limit' or type=='Market') else (False)
         self.isOrderAlive     = False
         self.isOrderDead      = False
         self.isOrderCancelled = False
-
         self.isOrderOpened    = False
         self.indexOpened      = None
         self.timestampOpened  = None
@@ -94,7 +114,9 @@ class Order:
 
 
 
-        newTrade = Trade(self.ticketOrder, self.indexOpened, self.timestampOpened, self.valueVolume, self.openedPrice, self.priceSL, self.priceTP, self.enumDirection)
+        newTrade = Trade(self.fingerprint, self.indexOpened, self.timestampOpened, self.valueVolume, self.openedPrice, self.priceSL, self.priceTP, self.direction)
+
+        return (newTrade)
     #
     
     
@@ -102,10 +124,10 @@ class Order:
 
     def Refresh(self, aCandlestick: CandleStick):
 
-        if (self.enumDirection=='BuyLong'):
+        if (self.direction=='BuyLong'):
 
 
-            if (self.enumType=='TrigerLimit'):
+            if (self.type=='TrigerLimit'):
 
                 if (self.trigered==True):
 
@@ -125,7 +147,7 @@ class Order:
                     #
                 #
             #
-            elif (self.enumType=='TrigerMarket'):
+            elif (self.type=='TrigerMarket'):
 
                 if (self.trigered==True):
 
@@ -142,24 +164,23 @@ class Order:
                     #
                 #
             #
-            elif (self.enumType=='Market'):
+            elif (self.type=='Market'):
 
-                self.NowOpen(aCandlestick.index, aCandlestick.timestampOpened, (aCandlestick.low + aCandlestick.slippage))
-                return
+                
+                return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, (aCandlestick.low + aCandlestick.slippage)))
             #
-            elif (self.enumType=='Limit'):
+            elif (self.type=='Limit'):
                     
-                if (aCandlestick.high + aCandlestick.slippage >= self.priceOpen):
+                if (aCandlestick.high + aCandlestick.averageslippage >= self.priceOpen):
 
-                    self.NowOpen(aCandlestick.index, aCandlestick.timestampOpened, self.priceOpen)
-                    return
+                    return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, self.priceOpen))
                 #
             #
         #
-        elif (self.enumDirection=='SellShort'):
+        elif (self.direction=='SellShort'):
 
 
-            if (self.enumType=='TrigerLimit'):
+            if (self.type=='TrigerLimit'):
 
                 if (self.trigered==True):
 
@@ -179,7 +200,7 @@ class Order:
                     #
                 #
             #
-            elif (self.enumType=='TrigerMarket'):
+            elif (self.type=='TrigerMarket'):
 
                 if (self.trigered==True):
 
@@ -196,20 +217,22 @@ class Order:
                     #
                 #
             #
-            elif (self.enumType=='Market'):
+            elif (self.type=='Market'):
 
-                self.NowOpen(aCandlestick.index, aCandlestick.timestampOpened, (aCandlestick.low))
-                return
+                return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, (aCandlestick.low)))
             #
-            elif (self.enumType=='Limit'):
+            elif (self.type=='Limit'):
                     
                 if (aCandlestick.low <= self.priceOpen):
 
-                    self.NowOpen(aCandlestick.index, aCandlestick.timestampOpened, self.priceOpen)
-                    return
+                    return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, self.priceOpen))
                 #
             #
         #
+
+
+
+        return (None)
     #
 
 
@@ -217,7 +240,7 @@ class Order:
 
     def Refresh(self, aTick: Tick):
 
-        if (self.enumDirection=='BuyLong'):
+        if (self.direction=='BuyLong'):
 
 
             if (self.enumType=='TrigerLimit'):
@@ -271,7 +294,7 @@ class Order:
                 #
             #
         #
-        elif (self.enumDirection=='SellShort'):
+        elif (self.direction=='SellShort'):
 
 
             if (self.enumType=='TrigerLimit'):
@@ -325,6 +348,10 @@ class Order:
                 #
             #
         #
+
+
+
+        return (None)
     #
 
 
@@ -443,6 +470,10 @@ class Order:
                 #
             #
         #
+
+
+
+        return (None)
     #
 
 
@@ -466,27 +497,50 @@ class Order:
 # A Trade is an Opened Order.
 ############################################################################################################
 class Trade:
+    
+
+
+
+    _Fingerprints = []
+
+
 
     
-    def __init__(self, ticketOrder, indexOpened, valueVolume, priceOpened, priceSL=0, priceTP=0, enumDirection=('BuyLong','SellShort')):
+    def __init__(self, indexOpened, timestampOpened, direction, valueVolume, priceOpened, priceSL, priceTP):
 
-        self.ticketOrder   = ticketOrder
 
-        self.indexOpened   = indexOpened
-        self.valueVolume   = valueVolume
-        self.priceOpened   = priceOpened
-        self.priceSL       = priceSL
-        self.priceTP       = priceTP
-        self.enumDirection = enumDirection
+        while (True):
 
-        self.ticketTrade   = None
+            newFingerPrint = random.randint(1000000, 10000000-1)
 
-        self.isTradeAlive  = False
-        self.isTradeDead   = False
+            if(newFingerPrint not in Trade._Fingerprints):
+                
+                Trade._Fingerprints.append(newFingerPrint)
+                break
+            #
+        #
+        self.fingerprint      = Trade._Fingerprints[-1]
 
-        self.ClosedPrice   = None
 
-        self.valuePnL      = 0
+        self.indexOpened      = indexOpened
+        self.timestampOpened  = timestampOpened
+
+
+        self.direction        = direction
+
+
+        self.valueVolume      = valueVolume
+        self.priceOpened      = priceOpened
+        self.priceSL          = priceSL
+        self.priceTP          = priceTP
+
+
+        self.isTradeAlive     = False
+        self.isTradeDead      = False
+        self.ClosedPrice      = None
+
+
+        self.valuePnL         = 0
     #
 
 
@@ -500,20 +554,11 @@ class Trade:
 
 
 
-
-    def GenerateTradeTicket(self):
-
-        pass
-    #
-
-
-
-
-    def KillTrade(self, killingAtPrice):
+    def EndTrade(self, EndingAtPrice):
 
         self.isTradeAlive = False
         self.isClosed     = True
-        self.ClosedPrice  = killingAtPrice
+        self.ClosedPrice  = EndingAtPrice
 
         self.CalculateTradePnL(self.ClosedPrice)
     #
@@ -525,14 +570,14 @@ class Trade:
 
         result = 0.0
 
-        if(self.enumDirection=='BuyLong'):
+        if(self.direction=='BuyLong'):
 
             openedQuality    = (self.valueVolume*self.priceOpened)
             thisPriceQuality = (self.valueVolume*calculatingAtPrice)
 
             result = (thisPriceQuality-openedQuality)
         #
-        elif (self.enumDirection=='SellShort'):
+        elif (self.direction=='SellShort'):
 
             openedQuality    = (self.valueVolume*self.priceOpened)
             thisPriceQuality = (self.valueVolume*calculatingAtPrice)
@@ -550,44 +595,44 @@ class Trade:
 
 
     
-    def RefreshStatus(self, aCandleStick: CandleStick):
+    def Refresh(self, aCandleStick: CandleStick):
 
-        if (self.enumDirection=='BuyLong'):
+        if (self.direction=='BuyLong'):
 
             if (aCandleStick.low <= self.priceSL and self.priceSL!=0):
 
-                self.KillTrade(self.priceSL)
+                self.EndTrade(self.priceSL)
                 return
             #
-            elif (aCandleStick.high+aCandleStick.slippage >= self.priceTP and self.priceTP!=0):
+            elif (aCandleStick.high+aCandleStick.averageslippage >= self.priceTP and self.priceTP!=0):
 
-                self.KillTrade(self.priceTP)
+                self.EndTrade(self.priceTP)
                 return
             #
 
             self.CalculateTradePnL(aCandleStick.low)
         #
-        elif (self.enumDirection=='SellShort'):
+        elif (self.direction=='SellShort'):
 
-            if (aCandleStick.high+aCandleStick.slippage >= self.priceSL and self.priceSL!=0):
+            if (aCandleStick.high+aCandleStick.averageslippage >= self.priceSL and self.priceSL!=0):
 
-                self.KillTrade(self.priceSL)
+                self.EndTrade(self.priceSL)
                 return
             #
-            elif (aCandleStick.low+aCandleStick.slippage <= self.priceTP and self.priceTP!=0):
+            elif (aCandleStick.low+aCandleStick.averageslippage <= self.priceTP and self.priceTP!=0):
 
-                self.KillTrade(self.priceTP)
+                self.EndTrade(self.priceTP)
                 return
             #
 
-            self.CalculateTradePnL(aCandleStick.high+aCandleStick.slippage)
+            self.CalculateTradePnL(aCandleStick.high+aCandleStick.averageslippage)
         #
     #
 
 
 
 
-    def RefreshStatus(self, aTick: Tick):
+    def Refresh(self, aTick: Tick):
 
         if (self.enumDirection=='BuyLong'):
 
@@ -624,7 +669,7 @@ class Trade:
 
 
 
-    def RefreshStatus(self, aCandleTick: CandleTick):
+    def Refresh(self, aCandleTick: CandleTick):
 
         for aTick in aCandleTick.ticks:
 
