@@ -95,22 +95,12 @@ class Order:
 
 
         newTrade = Trade(self.ticketOrder, self.indexOpened, self.timestampOpened, self.valueVolume, self.openedPrice, self.priceSL, self.priceTP, self.enumDirection)
-        
-        # if (backtesterType=='TwoWay'):
-            
-        #     newPosition = Position()
-        #     newPosition.IncreaseTrade(newTrade)
-        #     backtesterPositions.append(newPosition)
-        #
-        # elif (backtesterType=='OneWay'):
-        #     pass
-        #
     #
     
     
 
 
-    def TryOpen(self, aCandlestick: CandleStick):
+    def Refresh(self, aCandlestick: CandleStick):
 
         if (self.enumDirection=='BuyLong'):
 
@@ -225,7 +215,7 @@ class Order:
 
 
 
-    def TryOpen(self, aTick: Tick):
+    def Refresh(self, aTick: Tick):
 
         if (self.enumDirection=='BuyLong'):
 
@@ -340,7 +330,7 @@ class Order:
 
 
 
-    def TryOpen(self, aCandleTick: CandleTick):
+    def Refresh(self, aCandleTick: CandleTick):
 
         for aTick in aCandleTick.ticks:
 
