@@ -15,7 +15,7 @@ class Buffer:
 
 
 
-    _BuffersFingerprints = []
+    _Fingerprints = []
 
 
 
@@ -27,13 +27,13 @@ class Buffer:
 
             newFingerPrint = random.randint(1000000, 10000000-1)
 
-            if(newFingerPrint not in Buffer._BuffersFingerprints):
+            if(newFingerPrint not in Buffer._Fingerprints):
                 
-                Buffer._BuffersFingerprints.append(newFingerPrint)
+                Buffer._Fingerprints.append(newFingerPrint)
                 break
             #
         #
-        self.fingerprintBuffer = Buffer._BuffersFingerprints[-1]
+        self.fingerprintBuffer = Buffer._Fingerprints[-1]
 
         self.num         = numBuffer
         self.size        = 0
@@ -69,7 +69,7 @@ class Indicator:
 
 
 
-    _IndicatorsFingerprints = []
+    _Fingerprints = []
 
 
 
@@ -81,13 +81,13 @@ class Indicator:
 
             newFingerPrint = random.randint(1000000, 10000000-1)
 
-            if(newFingerPrint not in Indicator._IndicatorsFingerprints):
+            if(newFingerPrint not in Indicator._Fingerprints):
                 
-                Indicator._IndicatorsFingerprints.append(newFingerPrint)
+                Indicator._Fingerprints.append(newFingerPrint)
                 break
             #
         #
-        self.fingerprint    = Indicator._IndicatorsFingerprints[-1]
+        self.fingerprint    = Indicator._Fingerprints[-1]
         self.name           = nameIndicator
 
         self.buffers        = dict()
