@@ -51,14 +51,13 @@ class Brain:
 
             for buffer in indicator.buffers.values():
 
-
                 if (buffer.job=='Signal'):
 
                     for i, signal in enumerate(buffer.values):
                         
                         if (signal is not None):
 
-                            newOrder = Order(indexSignaled=i, timestampPlaced=buffer.times[i], type=signal.action, direction=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, PriceTP=signal.priceTP)
+                            newOrder = Order(indexPlaced=i, timestampPlaced=buffer.times[i], type=signal.action, direction=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, priceTP=signal.priceTP)
 
                             self.orders.append(newOrder)
                         #
@@ -66,6 +65,40 @@ class Brain:
                 #
             #
         #
+
+
+        for i in range(len(self.knowledge)):
+
+            timeA  =  self.knowledge['time'].iloc[i]
+            open   =  self.knowledge['open'].iloc[i]
+            high   =  self.knowledge['high'].iloc[i]
+            low    =  self.knowledge['low'].iloc[i]
+            close  =  self.knowledge['close'].iloc[i]
+            volume =  self.knowledge['volume'].iloc[i]
+            spread =  self.knowledge['spread'].iloc[i]
+
+            candle = CandleStick(i, timeA, 0, open, high, low, close, volume, spread, 0.1)
+
+            for order in self.orders:
+
+                if (order.isAlive):
+
+                    tmp = order.Refresh(candle)
+                    # print(tmp)
+                    if (tmp is not None):
+
+                        self.trades.append(tmp)
+                    #
+                #
+            #
+
+            for trade in self.trades:
+
+                if (trade.isAlive):
+
+                    trade.Refresh(candle)
+                #
+            #
     #
 
 
@@ -119,6 +152,9 @@ class Brain:
 
     def Speak(self):
 
-        pass
+        for trade in self.trades:
+
+            print(trade.valuePnL)
+        #
     #
 #
