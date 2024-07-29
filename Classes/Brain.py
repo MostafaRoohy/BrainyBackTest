@@ -51,6 +51,32 @@ class Brain:
 
             for buffer in indicator.buffers.values():
 
+
+                if (buffer.job=='Signal'):
+
+                    for i, signal in enumerate(buffer.values):
+                        pass
+                        # if (arrow is not None):
+
+                        #     newOrder = Order(indexSignaled=i, enumType=signal.action, enumDirection=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, PriceTP=signal.priceTP)
+
+                        #     self.orders.append(newOrder)
+                        # #
+                    #
+                #
+            #
+        #
+    #
+
+
+
+
+    def Imagine(self):
+
+        for indicator in self.indicators:
+
+            for buffer in indicator.buffers.values():
+
                 if (buffer.job=='DrawLine'):
 
                     title = str(indicator.name+"_"+buffer.title)
@@ -81,30 +107,9 @@ class Brain:
                         #
                     #
                 #
-
-
-                if (buffer.job=='Signal'):
-
-                    for i, signal in enumerate(buffer.values):
-
-                        if (arrow is not None):
-
-                            newOrder = Order(indexSignaled=i, enumType=signal.action, enumDirection=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, PriceTP=signal.priceTP)
-
-                            self.orders.append(newOrder)
-                        #
-                    #
-
-                    
-                #
             #
         #
-    #
 
-
-
-
-    def Imagine(self):
 
         self.chart.load()
     #
