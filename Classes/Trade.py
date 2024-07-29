@@ -15,7 +15,7 @@ class SignalRequest:
     _SignalRequestFigerprints = []
 
 
-    def __init__(self, action=('NewOrderLimit','NewOrderTriggerLimit','NewOrderMarket','NewOrderTriggerMarket','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), direction=('BuyLong','SellShort'), priceTrigger=0.0, priceOpen=0.0, priceTP=0.0, priceSL=0.0, valueVolume=0.0, byFingerprint=0):
+    def __init__(self, action=('Limit','TriggerLimit','Market','TriggerMarket','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), direction=('BuyLong','SellShort'), priceTrigger=0.0, priceOpen=0.0, priceTP=0.0, priceSL=0.0, valueVolume=0.0, byFingerprint=0):
         
         self.action        = action
         self.direction     = direction
@@ -114,7 +114,7 @@ class Order:
 
 
 
-        newTrade = Trade(self.fingerprint, self.indexOpened, self.timestampOpened, self.valueVolume, self.openedPrice, self.priceSL, self.priceTP, self.direction)
+        newTrade = Trade(self.fingerprint, self.indexOpened, self.timestampOpened, self.type, self.direction, self.valueVolume, self.priceTrigger, self.openedPrice, self.priceSL, self.priceTP)
 
         return (newTrade)
     #
@@ -506,18 +506,10 @@ class Trade:
 
 
     
-    def __init__(self, indexOpened, timestampOpened, direction, valueVolume, priceOpened, priceSL, priceTP):
+    def __init__(self, fingerprint, indexOpened, timestampOpened, type, direction, valueVolume, priceTriggered, priceOpened, priceSL, priceTP):
 
 
-        while (True):
-
-            newFingerPrint = random.randint(1000000, 10000000-1)
-
-            if(newFingerPrint not in Trade._Fingerprints):
-                
-                Trade._Fingerprints.append(newFingerPrint)
-                break
-            #
+        Trade._Fingerprints.append(fingerprint)
         #
         self.fingerprint      = Trade._Fingerprints[-1]
 
@@ -526,10 +518,11 @@ class Trade:
         self.timestampOpened  = timestampOpened
 
 
+        self.type             = type
         self.direction        = direction
 
-
         self.valueVolume      = valueVolume
+        self.priceTriggered   = priceTriggered
         self.priceOpened      = priceOpened
         self.priceSL          = priceSL
         self.priceTP          = priceTP
@@ -560,7 +553,7 @@ class Trade:
         self.isClosed     = True
         self.ClosedPrice  = EndingAtPrice
 
-        self.CalculateTradePnL(self.ClosedPrice)
+        self.CalculateTradePnL(EndingAtPrice)
     #
     
 
@@ -586,8 +579,6 @@ class Trade:
         #
 
 
-
-
         self.valuePnL = result
         return (result)
     #
@@ -604,7 +595,7 @@ class Trade:
                 self.EndTrade(self.priceSL)
                 return
             #
-            elif (aCandleStick.high+aCandleStick.averageslippage >= self.priceTP and self.priceTP!=0):
+            elif (aCandleStick.high+aCandleStick.averageSlippage >= self.priceTP and self.priceTP!=0):
 
                 self.EndTrade(self.priceTP)
                 return
@@ -614,12 +605,12 @@ class Trade:
         #
         elif (self.direction=='SellShort'):
 
-            if (aCandleStick.high+aCandleStick.averageslippage >= self.priceSL and self.priceSL!=0):
+            if (aCandleStick.high+aCandleStick.averageSlippage >= self.priceSL and self.priceSL!=0):
 
                 self.EndTrade(self.priceSL)
                 return
             #
-            elif (aCandleStick.low+aCandleStick.averageslippage <= self.priceTP and self.priceTP!=0):
+            elif (aCandleStick.low+aCandleStick.averageSlippage <= self.priceTP and self.priceTP!=0):
 
                 self.EndTrade(self.priceTP)
                 return

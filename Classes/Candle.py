@@ -36,8 +36,8 @@ class CandleStick:
         self.volume = candleVolume
 
 
-        self.averagespread   = (candleSpread)
-        self.averageslippage = (candleSpread*marketPoints)
+        self.averageSpread   = (candleSpread)
+        self.averageSlippage = (candleSpread*marketPoints)
     #
 #
 

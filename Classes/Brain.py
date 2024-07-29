@@ -55,13 +55,13 @@ class Brain:
                 if (buffer.job=='Signal'):
 
                     for i, signal in enumerate(buffer.values):
-                        pass
-                        # if (arrow is not None):
+                        
+                        if (signal is not None):
 
-                        #     newOrder = Order(indexSignaled=i, enumType=signal.action, enumDirection=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, PriceTP=signal.priceTP)
+                            newOrder = Order(indexSignaled=i, timestampPlaced=buffer.times[i], type=signal.action, direction=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, PriceTP=signal.priceTP)
 
-                        #     self.orders.append(newOrder)
-                        # #
+                            self.orders.append(newOrder)
+                        #
                     #
                 #
             #
