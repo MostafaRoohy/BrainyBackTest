@@ -13,17 +13,15 @@ class Brain:
 
 
 
-    def __init__(self, chartData:pd.DataFrame, valueCapital:int, modeHedge=('TwoWay','OneWay')):
+    def __init__(self, chartData:pd.DataFrame, valueCapital:int):
 
         self.valueCapital = valueCapital
-        self.modeHedge    = modeHedge
         
         self.knowledge  = chartData
         self.indicators = []
 
         self.orders    = []
         self.trades    = []
-        self.Positions = []
 
         self.chart = JupyterChart(inner_width=0.5, inner_height=0.5, width=1300, height=500, toolbox=True)
         self.chart.set(chartData)
