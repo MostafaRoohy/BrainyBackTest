@@ -17,6 +17,19 @@ class SignalRequest:
 
     def __init__(self, action=('Limit','TriggerLimit','Market','TriggerMarket','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), direction=('BuyLong','SellShort'), priceTrigger=0.0, priceOpen=0.0, priceTP=0.0, priceSL=0.0, valueVolume=0.0, byFingerprint=0):
         
+        while (True):
+
+            newFingerPrint = random.randint(1000000, 10000000-1)
+
+            if(newFingerPrint not in SignalRequest._Fingerprints):
+                
+                SignalRequest._Fingerprints.append(newFingerPrint)
+                
+                break
+            #
+        #
+        self.fingerprint        = SignalRequest._Fingerprints[-1]
+
         self.action        = action
         self.direction     = direction
 
@@ -30,17 +43,6 @@ class SignalRequest:
 
 
 
-        while (True):
-
-            newFingerPrint = random.randint(1000000, 10000000-1)
-
-            if(newFingerPrint not in SignalRequest._Fingerprints):
-                
-                SignalRequest._Fingerprints.append(newFingerPrint)
-                
-                break
-            #
-        #
     #
 #
 
@@ -57,7 +59,6 @@ class Order:
 
 
     def __init__(self, indexPlaced, timestampPlaced, type=('Limit','TriggerLimit','Market','TriggerMarket'), direction=('BuyLong','SellShort'), valueVolume=0, priceTrigger=0, priceOpen=0, priceSL=0, priceTP=0):
-
 
         while (True):
 
@@ -282,19 +283,13 @@ class Trade:
     #
 
 
-    def PrintTraded(self):
-
-        print("Trade Ticket: ", self.ticketTrade, "\t", "PnL= ", self.valuePnL)
-    #
-
-
-    def EndTrade(self, EndingAtPrice):
+    def KillTrade(self, killingAtPrice):
 
         self.isAlive      = False
         self.isDead       = True
-        self.ClosedPrice  = EndingAtPrice
+        self.ClosedPrice  = killingAtPrice
 
-        self.CalculateTradePnL(EndingAtPrice)
+        self.CalculateTradePnL(killingAtPrice)
     #
     
 
@@ -307,14 +302,14 @@ class Trade:
             openedQuality    = (self.valueVolume*self.priceOpened)
             thisPriceQuality = (self.valueVolume*calculatingAtPrice)
 
-            result = (thisPriceQuality-openedQuality)
+            result = round((thisPriceQuality-openedQuality), 2)
         #
         elif (self.direction=='SellShort'):
 
             openedQuality    = (self.valueVolume*self.priceOpened)
             thisPriceQuality = (self.valueVolume*calculatingAtPrice)
 
-            result = (openedQuality-thisPriceQuality)
+            result = round((openedQuality-thisPriceQuality), 2)
         #
 
 
@@ -329,12 +324,12 @@ class Trade:
 
             if (aCandleStick.low <= self.priceSL and self.priceSL!=0):
 
-                self.EndTrade(self.priceSL)
+                self.KillTrade(self.priceSL)
                 return
             #
             elif (aCandleStick.high+aCandleStick.averageSlippage >= self.priceTP and self.priceTP!=0):
 
-                self.EndTrade(self.priceTP)
+                self.KillTrade(self.priceTP)
                 return
             #
 
@@ -344,12 +339,12 @@ class Trade:
 
             if (aCandleStick.high+aCandleStick.averageSlippage >= self.priceSL and self.priceSL!=0):
 
-                self.EndTrade(self.priceSL)
+                self.KillTrade(self.priceSL)
                 return
             #
             elif (aCandleStick.low+aCandleStick.averageSlippage <= self.priceTP and self.priceTP!=0):
 
-                self.EndTrade(self.priceTP)
+                self.KillTrade(self.priceTP)
                 return
             #
 
