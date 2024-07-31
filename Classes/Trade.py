@@ -6,9 +6,6 @@ from Classes.Candle import *
 
 
 
-############################################################################################################
-# A SignalRequest is like a clue that is inside an Indicator's buffer, so the Brain can act upon these clues.
-############################################################################################################
 class SignalRequest:
 
 
@@ -40,18 +37,12 @@ class SignalRequest:
         self.valueVolume   = valueVolume
 
         self.byFingerprint = byFingerprint
-
-
-
     #
 #
 
 
 
 
-############################################################################################################
-# An Order is a command that the Brain generates and sends to the platform.
-############################################################################################################
 class Order:
 
 
@@ -243,9 +234,6 @@ class Order:
 
 
 
-############################################################################################################
-# A Trade is an Opened Order.
-############################################################################################################
 class Trade:
     
 
@@ -276,7 +264,7 @@ class Trade:
 
         self.isAlive          = True
         self.isDead           = False
-        self.ClosedPrice      = None
+        self.priceClosed      = None
 
 
         self.valuePnL         = 0
@@ -287,7 +275,7 @@ class Trade:
 
         self.isAlive      = False
         self.isDead       = True
-        self.ClosedPrice  = killingAtPrice
+        self.priceClosed  = killingAtPrice
 
         self.CalculateTradePnL(killingAtPrice)
     #

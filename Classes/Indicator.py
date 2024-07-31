@@ -7,18 +7,10 @@ from colour import Color
 
 
 
-############################################################################################################
-# A Buffer is a sequence that the Brain will take actions on it.
-# Actions like Drawing line, Drawing Arrows, Opening Closing Modifying Trades and etc...
-############################################################################################################
 class Buffer:
 
 
-
-
     _Fingerprints = []
-
-
 
 
     def __init__(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
@@ -47,8 +39,6 @@ class Buffer:
         self.values = [None for _ in range(0)]
         self.times  = [None for _ in range(0)]
     #
-
-
 
 
     def ResizeBuffer(self, newSize):

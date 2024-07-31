@@ -40,15 +40,28 @@ class Brain:
         #
 
 
-        for indicator in self.indicators:
+        for i in range(len(self.knowledge)):
 
-            for buffer in indicator.buffers.values():
+            timeA  =  self.knowledge['time'].iloc[i]
+            open   =  self.knowledge['open'].iloc[i]
+            high   =  self.knowledge['high'].iloc[i]
+            low    =  self.knowledge['low'].iloc[i]
+            close  =  self.knowledge['close'].iloc[i]
+            volume =  0 #self.knowledge['volume'].iloc[i]
+            spread =  0 #self.knowledge['spread'].iloc[i]
 
-                if (buffer.job=='Signal'):
+            candle = CandleStick(i, timeA, timeA, open, high, low, close, volume, spread, 0.1)
 
-                    for i, signal in enumerate(buffer.values):
-                        
-                        if (signal is not None):
+
+            for indicator in self.indicators:
+
+                for buffer in indicator.buffers.values():
+
+                    if (buffer.job=='Signal'):
+                            
+                        if (buffer.values[i] is not None):
+
+                            signal = buffer.values[i]
 
                             newOrder = Order(indexPlaced=i, timestampPlaced=buffer.times[i], type=signal.action, direction=signal.direction, valueVolume=signal.valueVolume, priceSL=signal.priceSL, priceTP=signal.priceTP)
 
@@ -57,27 +70,13 @@ class Brain:
                     #
                 #
             #
-        #
-
-
-        for i in range(len(self.knowledge)):
-
-            timeA  =  self.knowledge['time'].iloc[i]
-            open   =  self.knowledge['open'].iloc[i]
-            high   =  self.knowledge['high'].iloc[i]
-            low    =  self.knowledge['low'].iloc[i]
-            close  =  self.knowledge['close'].iloc[i]
-            volume =  self.knowledge['volume'].iloc[i]
-            spread =  self.knowledge['spread'].iloc[i]
-
-            candle = CandleStick(i, timeA, 0, open, high, low, close, volume, spread, 0.1)
 
             for order in self.orders:
 
                 if (order.isAlive):
 
                     tmp = order.Refresh(candle)
-                    # print(tmp)
+
                     if (tmp is not None):
 
                         self.trades.append(tmp)
@@ -97,10 +96,15 @@ class Brain:
 
     def Speak(self):
 
+        allPnL = 0
+
         for trade in self.trades:
 
-            print(trade.valuePnL)
+            print(f'Trade--> index={trade.indexOpened}\t timeOpened={trade.timestampOpened}\t Direction={trade.direction}\t V={trade.valueVolume}\t Opened={trade.priceOpened}\t SL={trade.priceSL}\t TP={trade.priceTP}\t PnL={trade.valuePnL}')
+            allPnL += trade.valuePnL
         #
+
+        print("All PnL = ", allPnL)
     #
 
 
