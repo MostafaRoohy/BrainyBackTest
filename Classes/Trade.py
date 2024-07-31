@@ -12,7 +12,7 @@ from Classes.Candle import *
 class SignalRequest:
 
 
-    _SignalRequestFigerprints = []
+    _Fingerprints = []
 
 
     def __init__(self, action=('Limit','TriggerLimit','Market','TriggerMarket','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), direction=('BuyLong','SellShort'), priceTrigger=0.0, priceOpen=0.0, priceTP=0.0, priceSL=0.0, valueVolume=0.0, byFingerprint=0):
@@ -34,9 +34,9 @@ class SignalRequest:
 
             newFingerPrint = random.randint(1000000, 10000000-1)
 
-            if(newFingerPrint not in SignalRequest._SignalRequestFigerprints):
+            if(newFingerPrint not in SignalRequest._Fingerprints):
                 
-                SignalRequest._SignalRequestFigerprints.append(newFingerPrint)
+                SignalRequest._Fingerprints.append(newFingerPrint)
                 
                 break
             #
@@ -53,11 +53,7 @@ class SignalRequest:
 class Order:
 
 
-
-
     _Fingerprints = []
-
-
 
 
     def __init__(self, indexPlaced, timestampPlaced, type=('Limit','TriggerLimit','Market','TriggerMarket'), direction=('BuyLong','SellShort'), valueVolume=0, priceTrigger=0, priceOpen=0, priceSL=0, priceTP=0):
@@ -99,8 +95,6 @@ class Order:
         self.timestampOpened  = None
         self.priceOpened      = None
     #
-    
-
 
 
     def NowOpen(self, indexOpening, timestampOpening, priceOpening):
@@ -119,8 +113,6 @@ class Order:
         return (newTrade)
     #
     
-    
-
 
     def Refresh(self, aCandlestick: CandleStick):
 
@@ -236,8 +228,6 @@ class Order:
     #
 
 
-
-
     def CancelOrder(self):
 
         self.indexOpened      = 0
@@ -258,11 +248,7 @@ class Order:
 class Trade:
     
 
-
-
     _Fingerprints = []
-
-
 
     
     def __init__(self, fingerprint, indexOpened, timestampOpened, type, direction, valueVolume, priceTriggered, priceOpened, priceSL, priceTP):
@@ -296,14 +282,10 @@ class Trade:
     #
 
 
-
-
     def PrintTraded(self):
 
         print("Trade Ticket: ", self.ticketTrade, "\t", "PnL= ", self.valuePnL)
     #
-
-
 
 
     def EndTrade(self, EndingAtPrice):
@@ -314,8 +296,6 @@ class Trade:
 
         self.CalculateTradePnL(EndingAtPrice)
     #
-    
-
     
 
     def CalculateTradePnL(self, calculatingAtPrice):
@@ -341,8 +321,6 @@ class Trade:
         self.valuePnL = result
         return (result)
     #
-
-
 
     
     def Refresh(self, aCandleStick: CandleStick):
