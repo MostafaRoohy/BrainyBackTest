@@ -9,10 +9,7 @@ from Classes.Trade import *
 
 
 
-
 class Brain:
-
-
 
 
     def __init__(self, chartData:pd.DataFrame, valueCapital:int):
@@ -21,15 +18,11 @@ class Brain:
         
         self.knowledge  = chartData
         self.indicators = []
+        self.chart      = None
 
-        self.orders    = []
-        self.trades    = []
-
-        self.chart = JupyterChart(inner_width=0.5, inner_height=0.5, width=1300, height=500, toolbox=True)
-        self.chart.set(chartData)
+        self.orders     = []
+        self.trades     = []
     #
-
-
 
 
     def AddIndicator(self, newIndicator:Indicator):
@@ -37,8 +30,6 @@ class Brain:
         self.indicators.append(newIndicator)
         self.indicators[-1].FeedInitialData(self.knowledge)
     #
-
-
 
 
     def Think(self):
@@ -104,8 +95,6 @@ class Brain:
     #
 
 
-
-
     def Speak(self):
 
         for trade in self.trades:
@@ -115,9 +104,10 @@ class Brain:
     #
 
 
-
-
     def Imagine(self):
+
+        self.chart = JupyterChart(inner_width=0.5, inner_height=0.5, width=1300, height=500, toolbox=True)
+        self.chart.set(self.knowledge)
 
         for indicator in self.indicators:
 
