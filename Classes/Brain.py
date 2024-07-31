@@ -12,16 +12,16 @@ from Classes.Trade import *
 class Brain:
 
 
-    def __init__(self, chartData:pd.DataFrame, valueCapital:int):
+    def __init__(self, valueCapital:int, chartData:pd.DataFrame):
 
         self.valueCapital = valueCapital
         
-        self.knowledge  = chartData
-        self.indicators = []
-        self.chart      = None
+        self.knowledge    = chartData
+        self.indicators   = []
+        self.chart        = None
 
-        self.orders     = []
-        self.trades     = []
+        self.orders       = []
+        self.trades       = []
     #
 
 

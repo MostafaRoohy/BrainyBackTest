@@ -6,6 +6,7 @@ from colour import Color
 
 
 
+
 ############################################################################################################
 # A Buffer is a sequence that the Brain will take actions on it.
 # Actions like Drawing line, Drawing Arrows, Opening Closing Modifying Trades and etc...
@@ -67,11 +68,7 @@ class Buffer:
 class Indicator:
 
 
-
-
     _Fingerprints = []
-
-
 
 
     def __init__(self, nameIndicator:str):
@@ -106,15 +103,11 @@ class Indicator:
     #
 
 
-
-
     def SetNewBuffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
         newBuffer = Buffer(numBuffer, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
         self.buffers[numBuffer] = newBuffer
     #
-
-
 
 
     def FeedInitialData(self, initialData:pd.DataFrame):
@@ -137,14 +130,10 @@ class Indicator:
     #
 
 
-
-
     def SefValueBufferAtIndex(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
         
         (self.buffers[numBuffer]).values[indexBuffer] = valueBuffer
     #
-
-
 
 
     def SefValueBufferAtTime(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
@@ -153,14 +142,10 @@ class Indicator:
     #
 
 
-
-
     def GetValueBufferAtIndex(self, numBuffer:int, indexBuffer:int):
 
         return ((self.buffers[numBuffer]).values[indexBuffer])
     #
-
-
 
 
     def GetValueBufferAtTime(self, numBuffer:int, indexBuffer:int):
@@ -169,14 +154,10 @@ class Indicator:
     #
 
 
-
-
     def SetFunctionOnStart(self, functionOnStart):
 
         self.functionOnStart = functionOnStart
     #
-
-
 
 
     def SetFunctionOnTick(self, functionOnTick):
@@ -185,14 +166,10 @@ class Indicator:
     #
 
 
-
-
     def OnStart(self):
 
         self.functionOnStart(self, self.times, self.opens, self.highs, self.lows, self.closes, self.spreads, self.volumes)
     #
-
-
 
 
     def OnTick(self):
