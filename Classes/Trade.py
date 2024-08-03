@@ -151,7 +151,7 @@ class Order:
             elif (self.type=='Market'):
 
                 
-                return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, (aCandlestick.low + aCandlestick.averageSlippage)))
+                return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, (aCandlestick.open + aCandlestick.averageSlippage)))
             #
             elif (self.type=='Limit'):
                     
@@ -203,7 +203,7 @@ class Order:
             #
             elif (self.type=='Market'):
 
-                return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, (aCandlestick.low)))
+                return (self.NowOpen(aCandlestick.index, aCandlestick.timestampA, (aCandlestick.open)))
             #
             elif (self.type=='Limit'):
                     
