@@ -3,6 +3,7 @@ import numpy  as np
 import talib
 import random
 from colour import Color
+from BrainyBackTest.fingerprint import Fingerprint
 
 
 
@@ -10,23 +11,10 @@ from colour import Color
 class Buffer:
 
 
-    _Fingerprints = []
-
-
-    def __init__(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+    def __init__(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SamePanel','SeperatePanel','SeperateChart')):
         
 
-        while (True):
-
-            newFingerPrint = random.randint(1000000, 10000000-1)
-
-            if(newFingerPrint not in Buffer._Fingerprints):
-                
-                Buffer._Fingerprints.append(newFingerPrint)
-                break
-            #
-        #
-        self.fingerprintBuffer = Buffer._Fingerprints[-1]
+        self.fingerprint = Fingerprint().new_fingerprint()
 
         self.num         = numBuffer
         self.size        = 0
@@ -34,20 +22,22 @@ class Buffer:
         self.job         = jobBuffer
         self.width       = widthBuffer
         self.color       = colorBuffer
-        self.typeWindow  = typeWindow
+        self.typeWindow  = windowBuffer
 
-        self.values = [None for _ in range(0)]
-        self.times  = [None for _ in range(0)]
+        self.values = np.full(0, np.nan)
+        self.times  = np.full(0, np.nan)
     #
 
 
     def resize_buffer(self, newSize):
 
-        self.sizeBuffer  = newSize
 
-        if len(self.values) < newSize:
+        if len(self.size) < newSize:
 
-            self.values.extend([None] * (newSize - len(self.values)))
+            np.append(self.values, np.full(newSize-self.size, np.nan))
+            np.append(self.times,  np.full(newSize-self.size, np.nan))
+
+            self.size  = newSize
         #
     #
 #
@@ -58,64 +48,61 @@ class Buffer:
 class Indicator:
 
 
-    _Fingerprints = []
+    def __init__(self, nameIndicator:str, applyingData=None):
 
 
-    def __init__(self, nameIndicator:str):
+        self.fingerprint     = Fingerprint().new_fingerprint()
+        self.name            = nameIndicator
+        self.applyingData    = applyingData
+        self.buffers         = list()
 
 
-        while (True):
-
-            newFingerPrint = random.randint(1000000, 10000000-1)
-
-            if(newFingerPrint not in Indicator._Fingerprints):
-                
-                Indicator._Fingerprints.append(newFingerPrint)
-                break
-            #
-        #
-        self.fingerprint    = Indicator._Fingerprints[-1]
-        self.name           = nameIndicator
-
-        self.buffers        = dict()
-
-        self.applyingData = None
-        self.times        = None
-        self.opens        = None
-        self.highs        = None
-        self.lows         = None
-        self.closes       = None
-        self.spreads      = None
-        self.volumes      = None
+        self.times           = None
+        self.opens           = None
+        self.highs           = None
+        self.lows            = None
+        self.closes          = None
+        self.spreads         = None
+        self.volumes         = None
 
         self.functionOnStart = None
         self.functionOnTick  = None
+
+
+        self.feed_initial_data(self.applyingData)
     #
 
 
-    def set_new_buffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+    def set_new_buffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SameChart','SeperatePanel','SeperateChart')):
         
-        newBuffer = Buffer(numBuffer, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
+        newBuffer = Buffer(numBuffer, titleBuffer, jobBuffer, widthBuffer, colorBuffer, windowBuffer)
         self.buffers[numBuffer] = newBuffer
     #
 
 
     def feed_initial_data(self, initialData:pd.DataFrame):
 
-        self.applyingData = initialData
-        self.times        = initialData['time'].to_numpy()
-        self.opens        = initialData['open'].to_numpy()
-        self.highs        = initialData['high'].to_numpy()
-        self.lows         = initialData['low'].to_numpy()
-        self.closes       = initialData['close'].to_numpy()
-        self.spreads      = initialData['spread'].to_numpy()
-        self.volumes      = initialData['volume'].to_numpy()
 
-        
-        for buffer in self.buffers.values():
+        if (initialData is not None):
 
-            buffer.ResizeBuffer(len(initialData))
-            buffer.times = initialData['time'].to_list()
+
+            self.applyingData = initialData
+
+            self.times        = initialData['time'].to_numpy()
+            self.opens        = initialData['open'].to_numpy()
+            self.highs        = initialData['high'].to_numpy()
+            self.lows         = initialData['low'].to_numpy()
+            self.closes       = initialData['close'].to_numpy()
+            self.spreads      = initialData['spread'].to_numpy()
+            self.volumes      = initialData['volume'].to_numpy()
+
+            
+
+            for buffer in self.buffers:
+
+                buffer.resize_buffer(len(initialData))
+                self.buffers.times = initialData['time'].to_numpy()
+            #
         #
     #
 
@@ -132,6 +119,12 @@ class Indicator:
     #
 
 
+    def __setitem__(self, key, value):
+
+        pass
+    #
+
+
     def get_value_buffer_at_index(self, numBuffer:int, indexBuffer:int):
 
         return ((self.buffers[numBuffer]).values[indexBuffer])
@@ -139,6 +132,12 @@ class Indicator:
 
 
     def get_value_buffer_at_time(self, numBuffer:int, indexBuffer:int):
+
+        pass
+    #
+
+
+    def __getitem__(self, key):
 
         pass
     #
@@ -152,7 +151,7 @@ class Indicator:
 
     def set_function_OnTick(self, functionOnTick):
 
-        self.functionPnTick = functionOnTick
+        self.functionOnTick = functionOnTick
     #
 
 
@@ -164,6 +163,6 @@ class Indicator:
 
     def OnTick(self):
 
-        self.functionPnTick
+        self.functionOnTick
     #
 #
