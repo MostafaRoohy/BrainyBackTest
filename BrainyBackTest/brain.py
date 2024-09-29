@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 from lightweight_charts import JupyterChart
 import random
-from Classes.Candle import *
-from Classes.Indicator import *
-from Classes.Trade import *
+from BrainyBackTest.candle import *
+from BrainyBackTest.indicator import *
+from BrainyBackTest.trade import *
 
 
 

@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy  as np
 import random
-from Classes.Candle import *
+from BrainyBackTest.candle import *
 
 
 
