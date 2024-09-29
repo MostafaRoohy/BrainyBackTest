@@ -89,7 +89,7 @@ class Order:
     #
 
 
-    def NowOpen(self, indexOpening, timestampOpening, priceOpening):
+    def now_open(self, indexOpening, timestampOpening, priceOpening):
 
         self.indexOpened     = indexOpening
         self.timestampOpened = timestampOpening
@@ -106,7 +106,7 @@ class Order:
     #
     
 
-    def Refresh(self, aCandlestick: CandleStick):
+    def refresh(self, aCandlestick: CandleStick):
 
         if (self.direction=='BuyLong'):
 
@@ -220,7 +220,7 @@ class Order:
     #
 
 
-    def CancelOrder(self):
+    def cancel_order(self):
 
         self.indexOpened      = 0
         self.timestampOpened  = 0
@@ -271,7 +271,7 @@ class Trade:
     #
 
 
-    def KillTrade(self, killingAtPrice):
+    def kill_trade(self, killingAtPrice):
 
         self.isAlive      = False
         self.isDead       = True
@@ -281,7 +281,7 @@ class Trade:
     #
     
 
-    def CalculateTradePnL(self, calculatingAtPrice):
+    def calculate_PnL(self, calculatingAtPrice):
 
         result = 0.0
 
@@ -306,7 +306,7 @@ class Trade:
     #
 
     
-    def Refresh(self, aCandleStick: CandleStick):
+    def refresh(self, aCandleStick: CandleStick):
 
         if (self.direction=='BuyLong'):
 

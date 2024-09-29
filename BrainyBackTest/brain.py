@@ -25,14 +25,14 @@ class Brain:
     #
 
 
-    def AddIndicator(self, newIndicator:Indicator):
+    def add_indicator(self, newIndicator:Indicator):
 
         self.indicators.append(newIndicator)
         self.indicators[-1].FeedInitialData(self.knowledge)
     #
 
 
-    def Think(self):
+    def think(self):
 
         for indicator in self.indicators:
 
@@ -94,7 +94,7 @@ class Brain:
     #
 
 
-    def Speak(self):
+    def speak(self):
 
         allPnL = 0
 
@@ -108,7 +108,7 @@ class Brain:
     #
 
 
-    def Imagine(self):
+    def imagine(self):
 
         self.chart = JupyterChart(inner_width=0.5, inner_height=0.5, width=1300, height=500, toolbox=True)
         self.chart.set(self.knowledge)

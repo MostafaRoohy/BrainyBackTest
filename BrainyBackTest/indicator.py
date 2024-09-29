@@ -41,7 +41,7 @@ class Buffer:
     #
 
 
-    def ResizeBuffer(self, newSize):
+    def resize_buffer(self, newSize):
 
         self.sizeBuffer  = newSize
 
@@ -93,14 +93,14 @@ class Indicator:
     #
 
 
-    def SetNewBuffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
+    def set_new_buffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), typeWindow=('SamePanel','SeperatePanel','SeperateChart')):
         
         newBuffer = Buffer(numBuffer, titleBuffer, jobBuffer, widthBuffer, colorBuffer, typeWindow)
         self.buffers[numBuffer] = newBuffer
     #
 
 
-    def FeedInitialData(self, initialData:pd.DataFrame):
+    def feed_initial_data(self, initialData:pd.DataFrame):
 
         self.applyingData = initialData
         self.times        = initialData['time'].to_numpy()
@@ -120,37 +120,37 @@ class Indicator:
     #
 
 
-    def SefValueBufferAtIndex(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
+    def set_value_buffer_at_index(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
         
         (self.buffers[numBuffer]).values[indexBuffer] = valueBuffer
     #
 
 
-    def SefValueBufferAtTime(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
+    def set_value_buffer_at_time(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
         
         pass
     #
 
 
-    def GetValueBufferAtIndex(self, numBuffer:int, indexBuffer:int):
+    def get_value_buffer_at_index(self, numBuffer:int, indexBuffer:int):
 
         return ((self.buffers[numBuffer]).values[indexBuffer])
     #
 
 
-    def GetValueBufferAtTime(self, numBuffer:int, indexBuffer:int):
+    def get_value_buffer_at_time(self, numBuffer:int, indexBuffer:int):
 
         pass
     #
 
 
-    def SetFunctionOnStart(self, functionOnStart):
+    def set_function_OnStart(self, functionOnStart):
 
         self.functionOnStart = functionOnStart
     #
 
 
-    def SetFunctionOnTick(self, functionOnTick):
+    def set_function_OnTick(self, functionOnTick):
 
         self.functionPnTick = functionOnTick
     #
