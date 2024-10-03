@@ -28,7 +28,7 @@ class Brain:
     def add_indicator(self, newIndicator:Indicator):
 
         self.indicators.append(newIndicator)
-        self.indicators[-1].FeedInitialData(self.knowledge)
+        self.indicators[-1].feed_initial_data(self.knowledge)
     #
 
 
@@ -55,7 +55,7 @@ class Brain:
 
             for indicator in self.indicators:
 
-                for buffer in indicator.buffers.values():
+                for buffer in indicator.buffers:
 
                     if (buffer.job=='Signal'):
                             
@@ -115,12 +115,12 @@ class Brain:
 
         for indicator in self.indicators:
 
-            for buffer in indicator.buffers.values():
+            for buffer in indicator.buffers:
 
                 if (buffer.job=='DrawLine'):
 
                     title = str(indicator.name+"_"+buffer.title)
-                    self.knowledge[title] = pd.Series(buffer.values)
+                    self.knowledge[title] = buffer.values
                     self.chart.create_line(name=title, color=buffer.color, price_label=False, price_line=False).set(self.knowledge)
                 #
 

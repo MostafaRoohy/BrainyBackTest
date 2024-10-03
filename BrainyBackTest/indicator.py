@@ -29,12 +29,12 @@ class Buffer:
         if (jobBuffer=='Signal'):
 
             self.values = np.full(shape=0, fill_value=nullValue, dtype=object)
-            self.times  = np.full(shape=0, fill_value=nullValue, dtype=object)
+            # self.times  = np.full(shape=0, fill_value=nullValue, dtype=object)
         #
         else:
 
             self.values = np.full(shape=0, fill_value=nullValue, dtype=np.float64)
-            self.times  = np.full(shape=0, fill_value=nullValue, dtype=np.float64)
+            # self.times  = np.full(shape=0, fill_value=nullValue, dtype=np.float64)
         #
     #
 
@@ -42,11 +42,9 @@ class Buffer:
     def resize_buffer(self, newSize):
 
 
-        if len(self.size) < newSize:
+        if (self.size < newSize):
 
-            np.append(self.values, np.full(shape=newSize-self.size, fill_value=self.nullValue))
-            np.append(self.times,  np.full(shape=newSize-self.size, fill_value=self.nullValue))
-
+            self.values = np.append(self.values, np.full(shape=newSize-self.size, fill_value=self.nullValue))
             self.size  = newSize
         #
     #
@@ -101,7 +99,7 @@ class Indicator:
     def set_new_buffer(self, numBuffer:int, nullValue:float, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SameChart','SeperatePanel','SeperateChart')):
         
         newBuffer = Buffer(numBuffer, nullValue, titleBuffer, jobBuffer, widthBuffer, colorBuffer, windowBuffer)
-        self.buffers[numBuffer] = newBuffer
+        self.buffers.append(newBuffer)
     #
 
 
@@ -124,9 +122,9 @@ class Indicator:
             for buffer in self.buffers:
 
                 buffer.resize_buffer(len(initialData))
-                self.buffers.times = initialData['time'].to_numpy()
             #
         #
+
     #
 
     #########################################################################################################
@@ -191,7 +189,7 @@ class Indicator:
         self.functionOnTick = functionOnTick
     #
 
-    
+
     def OnStart(self):
 
         self.functionOnStart(self, self.times, self.opens, self.highs, self.lows, self.closes, self.spreads, self.volumes)
