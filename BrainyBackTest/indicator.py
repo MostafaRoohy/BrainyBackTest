@@ -11,12 +11,13 @@ from BrainyBackTest.fingerprint import Fingerprint
 class Buffer:
 
 
-    def __init__(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SamePanel','SeperatePanel','SeperateChart')):
+    def __init__(self, numBuffer:int, nullValue:float, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SamePanel','SeperatePanel','SeperateChart')):
         
 
         self.fingerprint = Fingerprint().new_fingerprint()
 
         self.num         = numBuffer
+        self.nullValue   = nullValue
         self.size        = 0
         self.title       = titleBuffer
         self.job         = jobBuffer
@@ -24,8 +25,17 @@ class Buffer:
         self.color       = colorBuffer
         self.typeWindow  = windowBuffer
 
-        self.values = np.full(0, np.nan)
-        self.times  = np.full(0, np.nan)
+
+        if (jobBuffer=='Signal'):
+
+            self.values = np.full(shape=0, fill_value=nullValue, dtype=object)
+            self.times  = np.full(shape=0, fill_value=nullValue, dtype=object)
+        #
+        else:
+
+            self.values = np.full(shape=0, fill_value=nullValue, dtype=np.float64)
+            self.times  = np.full(shape=0, fill_value=nullValue, dtype=np.float64)
+        #
     #
 
 
@@ -34,11 +44,26 @@ class Buffer:
 
         if len(self.size) < newSize:
 
-            np.append(self.values, np.full(newSize-self.size, np.nan))
-            np.append(self.times,  np.full(newSize-self.size, np.nan))
+            np.append(self.values, np.full(shape=newSize-self.size, fill_value=self.nullValue))
+            np.append(self.times,  np.full(shape=newSize-self.size, fill_value=self.nullValue))
 
             self.size  = newSize
         #
+    #
+
+    #########################################################################################################
+    #########################################################################################################
+    #########################################################################################################
+
+    def __setitem__(self, at, val):
+
+        self.values[at] = val
+    #
+
+
+    def __getitem__(self, at):
+
+        return (self.values[at])
     #
 #
 
@@ -48,7 +73,7 @@ class Buffer:
 class Indicator:
 
 
-    def __init__(self, nameIndicator:str, applyingData=None):
+    def __init__(self, nameIndicator:str, functionOnStart=None, functionOnTick=None, applyingData=None):
 
 
         self.fingerprint     = Fingerprint().new_fingerprint()
@@ -65,17 +90,17 @@ class Indicator:
         self.spreads         = None
         self.volumes         = None
 
-        self.functionOnStart = None
-        self.functionOnTick  = None
+        self.functionOnStart = functionOnStart
+        self.functionOnTick  = functionOnTick
 
 
         self.feed_initial_data(self.applyingData)
     #
 
 
-    def set_new_buffer(self, numBuffer:int, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SameChart','SeperatePanel','SeperateChart')):
+    def set_new_buffer(self, numBuffer:int, nullValue:float, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SameChart','SeperatePanel','SeperateChart')):
         
-        newBuffer = Buffer(numBuffer, titleBuffer, jobBuffer, widthBuffer, colorBuffer, windowBuffer)
+        newBuffer = Buffer(numBuffer, nullValue, titleBuffer, jobBuffer, widthBuffer, colorBuffer, windowBuffer)
         self.buffers[numBuffer] = newBuffer
     #
 
@@ -84,7 +109,6 @@ class Indicator:
 
 
         if (initialData is not None):
-
 
             self.applyingData = initialData
 
@@ -95,7 +119,6 @@ class Indicator:
             self.closes       = initialData['close'].to_numpy()
             self.spreads      = initialData['spread'].to_numpy()
             self.volumes      = initialData['volume'].to_numpy()
-
             
 
             for buffer in self.buffers:
@@ -106,6 +129,9 @@ class Indicator:
         #
     #
 
+    #########################################################################################################
+    #########################################################################################################
+    #########################################################################################################
 
     def set_value_buffer_at_index(self, numBuffer:int, indexBuffer:int, valueBuffer:float):
         
@@ -119,11 +145,16 @@ class Indicator:
     #
 
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, at, val):
 
-        pass
+        i, j = at
+
+        (self.buffers[i]).values[j] = val
     #
 
+    #########################################################################################################
+    #########################################################################################################
+    #########################################################################################################
 
     def get_value_buffer_at_index(self, numBuffer:int, indexBuffer:int):
 
@@ -137,10 +168,16 @@ class Indicator:
     #
 
 
-    def __getitem__(self, key):
+    def __getitem__(self, at):
 
-        pass
+        i, j = at
+
+        return ((self.buffers[i]).values[j])
     #
+
+    #########################################################################################################
+    #########################################################################################################
+    #########################################################################################################
 
 
     def set_function_OnStart(self, functionOnStart):
@@ -154,7 +191,7 @@ class Indicator:
         self.functionOnTick = functionOnTick
     #
 
-
+    
     def OnStart(self):
 
         self.functionOnStart(self, self.times, self.opens, self.highs, self.lows, self.closes, self.spreads, self.volumes)
@@ -166,3 +203,7 @@ class Indicator:
         self.functionOnTick
     #
 #
+
+
+
+
