@@ -20,6 +20,7 @@ import random
 
 class CandleStick:
 
+
     def __init__(self, candleIndex, candleTimestampA, candleTimestampB, candleOpen, candleHigh, candleLow, candleClose, candleVolume, candleSpread, marketPoints):
 
         self.index = candleIndex
@@ -46,6 +47,7 @@ class CandleStick:
 
 class Tick:
 
+
     def __init__(self, tickTimestamp:int, tickPrice:float, tickVolume:float, bidPrice:float, askPrice:float, bidVolume:float, askVolume:float, tickWaitMS:int):
 
         self.timestamp = tickTimestamp
@@ -69,6 +71,7 @@ class Tick:
 
 
 class CandleTick:
+
 
     def __init__(self, candleTimestampA, candleTimestampB, candleIndex, candleOpen, candleHigh, candleLow, candleClose, candleVolume, candleTicks: np.array):
 

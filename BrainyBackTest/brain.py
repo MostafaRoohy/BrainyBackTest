@@ -17,11 +17,11 @@ class Brain:
         self.valueCapital = valueCapital
         
         self.knowledge    = chartData
-        self.indicators   = []
+        self.indicators   = list()
         self.chart        = None
 
-        self.orders       = []
-        self.trades       = []
+        self.orders       = list()
+        self.trades       = list()
     #
 
 

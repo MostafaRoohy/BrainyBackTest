@@ -2,6 +2,7 @@ import pandas as pd
 import numpy  as np
 import random
 from BrainyBackTest.candle import *
+from BrainyBackTest.fingerprint import Fingerprint
 
 
 
@@ -9,23 +10,9 @@ from BrainyBackTest.candle import *
 class SignalRequest:
 
 
-    _Fingerprints = []
-
-
     def __init__(self, action=('Limit','TriggerLimit','Market','TriggerMarket','CloseAll','Close','ModifyTrigger','ModifyTP','ModifySL'), direction=('BuyLong','SellShort'), priceTrigger=0.0, priceOpen=0.0, priceTP=0.0, priceSL=0.0, valueVolume=0.0, byFingerprint=0):
         
-        while (True):
-
-            newFingerPrint = random.randint(1000000, 10000000-1)
-
-            if(newFingerPrint not in SignalRequest._Fingerprints):
-                
-                SignalRequest._Fingerprints.append(newFingerPrint)
-                
-                break
-            #
-        #
-        self.fingerprint        = SignalRequest._Fingerprints[-1]
+        self.fingerprint   = Fingerprint().new_fingerprint()
 
         self.action        = action
         self.direction     = direction
@@ -46,22 +33,9 @@ class SignalRequest:
 class Order:
 
 
-    _Fingerprints = []
-
-
     def __init__(self, indexPlaced, timestampPlaced, type=('Limit','TriggerLimit','Market','TriggerMarket'), direction=('BuyLong','SellShort'), valueVolume=0, priceTrigger=0, priceOpen=0, priceSL=0, priceTP=0):
 
-        while (True):
-
-            newFingerPrint = random.randint(1000000, 10000000-1)
-
-            if(newFingerPrint not in Order._Fingerprints):
-                
-                Order._Fingerprints.append(newFingerPrint)
-                break
-            #
-        #
-        self.fingerprint        = Order._Fingerprints[-1]
+        self.fingerprint        = Fingerprint().new_fingerprint()
 
 
         self.indexPlaced       = indexPlaced
@@ -236,16 +210,10 @@ class Order:
 
 class Trade:
     
-
-    _Fingerprints = []
-
     
     def __init__(self, fingerprint, indexOpened, timestampOpened, type, direction, valueVolume, priceTriggered, priceOpened, priceSL, priceTP):
 
-
-        Trade._Fingerprints.append(fingerprint)
-        #
-        self.fingerprint      = Trade._Fingerprints[-1]
+        self.fingerprint      = fingerprint
 
 
         self.indexOpened      = indexOpened

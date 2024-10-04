@@ -1,7 +1,5 @@
 import pandas as pd
 import numpy  as np
-import talib
-import random
 from colour import Color
 from BrainyBackTest.fingerprint import Fingerprint
 
@@ -71,14 +69,18 @@ class Buffer:
 class Indicator:
 
 
-    def __init__(self, nameIndicator:str, functionOnStart=None, functionOnTick=None, applyingData=None):
+    def __init__(self, nameIndicator:str, numIndicator=0, functionOnStart=None, functionOnTick=None, chartData=None):
 
 
         self.fingerprint     = Fingerprint().new_fingerprint()
-        self.name            = nameIndicator
-        self.applyingData    = applyingData
-        self.buffers         = list()
 
+        self.name            = nameIndicator
+        self.num             = numIndicator
+        self.functionOnStart = functionOnStart
+        self.functionOnTick  = functionOnTick
+        self.knowledge       = chartData
+
+        self.buffers         = list()
 
         self.times           = None
         self.opens           = None
@@ -88,11 +90,8 @@ class Indicator:
         self.spreads         = None
         self.volumes         = None
 
-        self.functionOnStart = functionOnStart
-        self.functionOnTick  = functionOnTick
 
-
-        self.feed_initial_data(self.applyingData)
+        self.feed_initial_data(self.knowledge)
     #
 
 
@@ -108,7 +107,7 @@ class Indicator:
 
         if (initialData is not None):
 
-            self.applyingData = initialData
+            self.knowledge    = initialData
 
             self.times        = initialData['time'].to_numpy()
             self.opens        = initialData['open'].to_numpy()
@@ -124,7 +123,12 @@ class Indicator:
                 buffer.resize_buffer(len(initialData))
             #
         #
+    #
 
+
+    def get_knowledge(self):
+
+        return (self.knowledge)
     #
 
     #########################################################################################################
@@ -201,7 +205,3 @@ class Indicator:
         self.functionOnTick
     #
 #
-
-
-
-
