@@ -129,9 +129,9 @@ class Brain:
 
                     for i, arrow in enumerate(buffer.values):
 
-                        if (arrow is not None):
+                        if (arrow != buffer.nullValue):
 
-                            self.chart.marker(time=buffer.times[i], position='below', shape='arrow_up', color=str(buffer.color))
+                            self.chart.marker(time=indicator.times[i], position='below', shape='arrow_up', color=str(buffer.color))
                         #
                     #
                 #
@@ -141,9 +141,9 @@ class Brain:
 
                     for i, arrow in enumerate(buffer.values):
 
-                        if (arrow is not None):
+                        if (arrow != buffer.nullValue):
 
-                            self.chart.marker(time=buffer.times[i], position='above', shape='arrow_down', color=str(buffer.color))
+                            self.chart.marker(time=indicator.times[i], position='above', shape='arrow_down', color=str(buffer.color))
                         #
                     #
                 #

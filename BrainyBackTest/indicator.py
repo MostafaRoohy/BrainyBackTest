@@ -109,7 +109,7 @@ class Indicator:
 
             self.knowledge    = initialData
 
-            self.times        = initialData['time'].to_numpy()
+            self.times        = initialData['time'].to_numpy(dtype=np.float64)
             self.opens        = initialData['open'].to_numpy()
             self.highs        = initialData['high'].to_numpy()
             self.lows         = initialData['low'].to_numpy()
