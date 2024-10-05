@@ -12,25 +12,32 @@ from BrainyBackTest.trade import *
 class Brain:
 
 
-    def __init__(self, valueCapital:int, chartData:pd.DataFrame):
+    def __init__(self, valueCapital:int=1000, chartData:pd.DataFrame=None, indicators:list=None):
 
         self.valueCapital = valueCapital
-        
         self.knowledge    = chartData
-        self.indicators   = list()
+        self.indicators   = indicators
         self.chart        = None
 
         self.orders       = list()
         self.trades       = list()
+
+
+        self.feed_initial_data(self.knowledge)
     #
 
 
-    def add_indicator(self, newIndicator:Indicator):
+    def feed_initial_data(self, initialData:pd.DataFrame=None):
 
-        self.indicators.append(newIndicator)
-        self.indicators[-1].feed_initial_data(self.knowledge)
+        for indicator in self.indicators:
+
+            indicator.feed_initial_data(initialData)
+        #
     #
 
+    #########################################################################################################
+    #########################################################################################################
+    #########################################################################################################
 
     def think(self):
 

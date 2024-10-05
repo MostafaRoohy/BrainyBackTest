@@ -27,12 +27,10 @@ class Buffer:
         if (jobBuffer=='Signal'):
 
             self.values = np.full(shape=0, fill_value=nullValue, dtype=object)
-            # self.times  = np.full(shape=0, fill_value=nullValue, dtype=object)
         #
         else:
 
             self.values = np.full(shape=0, fill_value=nullValue, dtype=np.float64)
-            # self.times  = np.full(shape=0, fill_value=nullValue, dtype=np.float64)
         #
     #
 
@@ -69,8 +67,7 @@ class Buffer:
 class Indicator:
 
 
-    def __init__(self, nameIndicator:str, numIndicator=0, functionOnStart=None, functionOnTick=None, chartData=None):
-
+    def __init__(self, nameIndicator:str="", numIndicator:int=0, functionOnStart=None, functionOnTick=None, chartData:pd.DataFrame=None):
 
         self.fingerprint     = Fingerprint().new_fingerprint()
 
@@ -92,18 +89,16 @@ class Indicator:
 
 
         self.feed_initial_data(self.knowledge)
+
+
+        if (self.knowledge is not None):
+
+            self.think()
+        #
     #
 
 
-    def set_new_buffer(self, numBuffer:int, nullValue:float, titleBuffer:str, jobBuffer=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer=1, colorBuffer=Color('white'), windowBuffer=('SameChart','SeperatePanel','SeperateChart')):
-        
-        newBuffer = Buffer(numBuffer, nullValue, titleBuffer, jobBuffer, widthBuffer, colorBuffer, windowBuffer)
-        self.buffers.append(newBuffer)
-    #
-
-
-    def feed_initial_data(self, initialData:pd.DataFrame):
-
+    def feed_initial_data(self, initialData:pd.DataFrame=None):
 
         if (initialData is not None):
 
@@ -122,6 +117,19 @@ class Indicator:
 
                 buffer.resize_buffer(len(initialData))
             #
+        #
+    #
+
+
+    def set_new_buffer(self, numBuffer:int=0, nullValue:float=0, titleBuffer:str="", jobBuffer:str=('MiddleCalculations','DrawLine','DrawArrowUps','DrawArrowDns','DrawHistogram','DrawZigZag','DrawFilling','DrawCandles','DrawBars','Signal'), widthBuffer:int=1, colorBuffer:Color=Color('white'), windowBuffer:str=('SameChart','SeperatePanel','SeperateChart')):
+        
+        newBuffer = Buffer(numBuffer, nullValue, titleBuffer, jobBuffer, widthBuffer, colorBuffer, windowBuffer)
+        self.buffers.append(newBuffer)
+
+
+        for buffer in self.buffers:
+
+            buffer.resize_buffer(len(self.knowledge))
         #
     #
 
@@ -152,6 +160,18 @@ class Indicator:
         i, j = at
 
         (self.buffers[i]).values[j] = val
+
+
+        if (isinstance(at, tuple)):
+
+            i, j = at
+            (self.buffers[i]).values[j] = val
+        #
+        elif (isinstance(at, int)):
+
+            i = at
+            (self.buffers[i].values[:]) = val
+        #
     #
 
     #########################################################################################################
@@ -172,9 +192,16 @@ class Indicator:
 
     def __getitem__(self, at):
 
-        i, j = at
+        if (isinstance(at, tuple)):
 
-        return ((self.buffers[i]).values[j])
+            i, j = at
+            return ((self.buffers[i]).values[j])
+        #
+        elif (isinstance(at, int)):
+
+            i = at
+            return (self.buffers[i].values[:])
+        #
     #
 
     #########################################################################################################
