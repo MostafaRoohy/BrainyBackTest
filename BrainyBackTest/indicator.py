@@ -77,8 +77,6 @@ class Indicator:
         self.functionOnTick  = functionOnTick
         self.knowledge       = chartData
 
-        self.buffers         = list()
-
         self.times           = None
         self.opens           = None
         self.highs           = None
@@ -86,6 +84,7 @@ class Indicator:
         self.closes          = None
         self.spreads         = None
         self.volumes         = None
+        self.buffers         = list()
 
 
         self.feed_initial_data(self.knowledge)
@@ -136,7 +135,77 @@ class Indicator:
 
     def get_knowledge(self):
 
-        return (self.knowledge)
+        if (self.knowledge is None):
+
+            print("The indicator is empty")
+        #
+        elif (isinstance(self.knowledge, pd.DataFrame)):
+
+            return (self.knowledge)
+        #
+        else:
+
+            return (pd.DataFrame(self.knowledge))
+        #
+    #
+
+    #########################################################################################################
+    #########################################################################################################
+    #########################################################################################################
+
+    def think(self):
+
+        self.OnStart()
+
+        for buffer in self.buffers:
+
+            if (buffer.job!='Signal'):
+
+                title = str(self.name+"_"+buffer.title)
+                self.knowledge[title] = pd.Series(buffer.values)
+            #
+            elif (buffer.job=='Signal'):
+
+                signalFingerprint = np.full(shape=len(self.knowledge), fill_value=0, dtype=np.int64)
+                signalAction      = np.full(shape=len(self.knowledge), fill_value="", dtype=str)
+                signalDir         = np.full(shape=len(self.knowledge), fill_value="", dtype=str)
+                signalTrigger     = np.full(shape=len(self.knowledge), fill_value=0, dtype=np.float64)
+                signalOpen        = np.full(shape=len(self.knowledge), fill_value=0, dtype=np.float64)
+                signalTP          = np.full(shape=len(self.knowledge), fill_value=0, dtype=np.float64)
+                signalSL          = np.full(shape=len(self.knowledge), fill_value=0, dtype=np.float64)
+                signalVol         = np.full(shape=len(self.knowledge), fill_value=0, dtype=np.float64)
+
+                for i in range(len(self.knowledge)):
+
+                    if (buffer.values[i]!=buffer.nullValue):
+
+                        signalFingerprint[i] = buffer.values[i].fingerprint
+                        signalAction[i]      = buffer.values[i].action
+                        signalDir[i]         = buffer.values[i].direction
+                        signalTrigger[i]     = buffer.values[i].priceTrigger
+                        signalOpen[i]        = buffer.values[i].priceOpen
+                        signalTP[i]          = buffer.values[i].priceTP
+                        signalSL[i]          = buffer.values[i].priceSL
+                        signalVol[i]         = buffer.values[i].valueVolume
+                    #
+                #
+
+                self.knowledge["Fingerprint"] = pd.Series(signalFingerprint)
+                self.knowledge["Action"]      = pd.Series(signalAction)
+                self.knowledge["Dir"]         = pd.Series(signalDir)
+                self.knowledge["Trigger"]     = pd.Series(signalTrigger)
+                self.knowledge["Open"]        = pd.Series(signalOpen)
+                self.knowledge["TP"]          = pd.Series(signalTP)
+                self.knowledge["SL"]          = pd.Series(signalSL)
+                self.knowledge["Vol"]         = pd.Series(signalVol)
+            #
+        #
+    #
+
+
+    def imagine(self):
+
+        pass
     #
 
     #########################################################################################################
